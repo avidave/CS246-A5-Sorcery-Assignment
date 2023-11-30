@@ -4,6 +4,7 @@
 #include <iostream>
 #include "subject.h"
 #include "owner.h"
+#include "deck.h"
 
 using namespace std;
 

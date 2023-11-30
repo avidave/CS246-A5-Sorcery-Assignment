@@ -2,6 +2,7 @@
 #include "subject.h"
 #include "controller.h"
 #include "owner.h"
+#include "deck.h"
 
 using namespace std;
 

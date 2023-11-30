@@ -3,6 +3,8 @@
 #include "observer.h"
 #include "controller.h"
 #include "owner.h"
+#include "deck.h"
+#include "card.h"
 
 using namespace std;
 
@@ -19,4 +21,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	cout << control.getActive().getName() << endl;
+
+	//Card c1{"Card 1", 1};
+	//Card c2{"Card 2", 2};
+	//Deck deck;
+	//deck.add(&c1);
+	//deck.add(&c2);
+	//cout << deck.display();
+	Player1.import_deck();
+	Player1.display_deck();
 }
