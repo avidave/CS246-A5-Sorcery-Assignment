@@ -9,6 +9,6 @@ Deck::Deck() : Collection{} {}
 
 bool Deck::add(Card *c) {
 	this->Cards.emplace_back(c);
-	cout << c->display() << endl;
+	//cout << c->display() << endl;
 	return true;
 }

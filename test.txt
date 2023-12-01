@@ -1,0 +1,11 @@
+help
+end
+quit
+draw
+discard
+attack
+play
+use
+describe
+hand
+board
