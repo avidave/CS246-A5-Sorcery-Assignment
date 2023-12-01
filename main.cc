@@ -30,13 +30,12 @@ int main(int argc, char *argv[]) {
 			++i;
 		} else if (arg == "-init") {
 			cout << arg << argv[i + 1] << endl;
-			try {
-				gameFile = ifstream{argv[i + 1]};
-				++i;
-				isInit = true;
-			} catch(...) {
+			gameFile = ifstream{argv[i + 1]};
+			if (!gameFile.is_open()) {
 				cerr << "Provided game file cannot be found" << endl;
 			}
+			++i;
+			isInit = true;
 		} else if (arg == "-testing") {
 			cout << arg << endl;
 			testing = true;
@@ -55,11 +54,11 @@ int main(int argc, char *argv[]) {
 	Player2.import_deck(deck2);
 	Controller control{cin, move(Player1), move(Player2)};
 
-	for (int i = 1; i < 3; i++) {
-		control.echoName(i);
-	}
+	// for (int i = 1; i < 3; i++) {
+	// 	control.echoName(i);
+	// }
 
-	cout << control.getActive().getName() << endl;
+	//cout << control.getActive().getName() << endl;
 
 	//Card c1{"Card 1", 1};
 	//Card c2{"Card 2", 2};
@@ -68,21 +67,35 @@ int main(int argc, char *argv[]) {
 	//deck.add(&c2);
 	//cout << deck.display();
 	//control.getActive().import_deck();
-	control.getActive().display_deck();
+	//control.getActive().display_deck();
 
 	string command;
 
-	while (gameFile >> command) {
+	while (isInit) {
+		if (!(gameFile >> command)) break;//cin >> command;
+		//if (!(cin >> command)) break;
+
 		if (command == "help") {
-			cout << command << endl;
+			cout << "Commands: ";
+			cout << "help -- Display this message." << endl;
+			cout << "\t  end -- End the current player’s turn." << endl;
+			cout << "\t  quit -- End the game." << endl;
+			cout << "\t  attack minion other-minion -- Orders minion to attack other-minion." << endl;
+			cout << "\t  attack minion -- Orders minion to attack the opponent." << endl;
+			cout << "\t  play card [target-player target-card] -- Play card, optionally targeting target-card owned by target-player." << endl;
+			cout << "\t  use minion [target-player target-card] -- Use minion’s special ability, optionally targeting target-card owned by target-player." << endl;
+			cout << "\t  inspect minion -- View a minion’s card and all enchantments on that minion." << endl;
+			cout << "\t  hand -- Describe all cards in your hand." << endl;
+			cout << "\t  board -- Describe all cards on the board." << endl;
 		} else if (command == "end") {
 			cout << command << endl;
 		} else if (command == "quit") {
-			cout << command << endl;
+			//cout << command << endl;
+			return 0;
 		} else if (command == "draw") {
-			cout << command << endl;
+			if (testing) cout << command << endl;
 		} else if (command == "discard") {
-			cout << command << endl;
+			if (testing) cout << command << endl;
 		} else if (command == "attack") {
 			cout << command << endl;
 		} else if (command == "play") {

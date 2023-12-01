@@ -1,6 +1,5 @@
-help
-end
-quit
+Arteen
+Avi
 draw
 discard
 attack
@@ -9,3 +8,7 @@ use
 describe
 hand
 board
+help
+end
+quit
+help
