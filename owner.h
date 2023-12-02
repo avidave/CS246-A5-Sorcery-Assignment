@@ -11,6 +11,8 @@ using namespace std;
 class Owner {
 	string name;
 	int num;
+	int life;
+	int magic;
 	Deck deck;
 	Hand hand;
 	vector<unique_ptr<Card>> allCards;
@@ -26,6 +28,7 @@ class Owner {
 		unique_ptr<Card> create_card(vector<string> info);
 		void import_deck(string file="default.deck");
 		bool draw(int i);
+		void add_magic(int i);
 		void display_deck();
 		void display_hand();
 		string getName();

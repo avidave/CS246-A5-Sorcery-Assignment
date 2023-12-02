@@ -12,16 +12,18 @@ class Controller : public Subject {
 	istream &in;
 	Owner p1;
 	Owner p2;
-	Owner &active = p1;
+	Owner *active = &p1;
 
 	public:
 		Controller(istream &in, Owner p1, Owner p2);
 		~Controller();
 
 		void echoName(int n);
-		Owner& getActive();
+		Owner* getActive();
 
 		void start();
+		void turn();
+		void flip_active();
 };
 
 #endif

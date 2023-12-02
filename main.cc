@@ -58,6 +58,9 @@ int main(int argc, char *argv[]) {
 
 	Controller control{cin, move(Player1), move(Player2)};
 	control.start();
+	control.turn();
+	control.flip_active();
+	control.turn();
 
 	// for (int i = 1; i < 3; i++) {
 	// 	control.echoName(i);

@@ -8,9 +8,7 @@
 #include <fstream>
 #include <iostream>
 
-Owner::Owner(string name, int num): name{name}, num{num} {
-	deck = Deck{};
-}
+Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {}
 Owner::~Owner() {}
 
 void Owner::shuffle_deck() {
@@ -113,6 +111,10 @@ bool Owner::draw(int i) {
 	}
 
 	return true;
+}
+
+void Owner::add_magic(int i) {
+	magic += i;
 }
 
 void Owner::display_deck() {
