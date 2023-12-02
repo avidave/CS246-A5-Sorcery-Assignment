@@ -19,6 +19,20 @@ string Card::getName() { return name; }
 int Card::getCost() { return cost; }
 int Card::getStrength() { return attack; }
 int Card::getDefense() { return defense; }
+int Card::take_damage(int d) {
+	defense -= d;
+	return defense;
+}
+
+void Card::set_actions(int a) {
+	actions = a;
+}
+
+void Card::use_action() {
+	actions--;
+}
+
+int Card::get_actions() { return actions; }
 string Card::getAbility() { return ability_txt; }
 int Card::getAbilityCost() { return ability_cost; }
 // string Card::getType() { return "Generic"; }

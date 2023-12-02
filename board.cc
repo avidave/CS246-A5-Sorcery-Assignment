@@ -13,3 +13,11 @@ bool Board::add(Card *c) {
 	//cout << c->display() << endl;
 	return true;
 }
+
+void Board::reset_minion_actions() {
+	for (int i = 0; i < Cards.size(); ++i) {
+		Cards[i]->set_actions(1);
+	}
+}
+
+vector<card_template_t> Board::display() { return {}; }

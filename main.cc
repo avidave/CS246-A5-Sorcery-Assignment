@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
 	} else {
 		control.play(cin, testing);
 	}
+	cout << control.getActive()->getName() << " Wins" << endl;
 	//control.turn();
 	//control.flip_active();
 	//control.turn();

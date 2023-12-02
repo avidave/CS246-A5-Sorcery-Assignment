@@ -12,6 +12,7 @@ class Card : public Observer {
 		int cost, attack, defense;
 		string ability_txt;
 		int ability_cost;
+		int actions = 1;
 	public:
 		Card(string name, int cost);
 		Card(string name, int cost, int attack, int defense);
@@ -26,6 +27,10 @@ class Card : public Observer {
 		virtual string display();
 		virtual int getStrength();
 		virtual int getDefense();
+		int get_actions();
+		int take_damage(int d);
+		void set_actions(int a);
+		void use_action();
 		virtual string getType() = 0;
 		void notify() override;
 		//virtual bool activate();

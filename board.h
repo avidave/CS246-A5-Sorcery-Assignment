@@ -13,6 +13,8 @@ class Board : public Collection {
 	public:
 		Board();
 		bool add(Card *c) override;
+		void reset_minion_actions();
+		vector<card_template_t> display() override;
 };
 
 

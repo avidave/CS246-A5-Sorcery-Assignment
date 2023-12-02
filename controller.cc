@@ -11,6 +11,8 @@ Controller::Controller(Owner p1, Owner p2) : p1{move(p1)}, p2{move(p2)} {
 	for (int i = 0; i < 4; ++i) {
 		triggers.emplace_back(Trigger{i});
 	}
+
+	attach(new TextView{&this->p1, &this->p2});
 }
 Controller::~Controller() {}
 
@@ -95,12 +97,10 @@ void Controller::play(istream &in, bool testing) {
 
 		} else if (command == "discard") {
 			if (testing) {
-				cout << command << endl;
 				int pos = stoi(commands[1]);
 				Card *c = active->get_hand().find(pos);
 				if (c->getType() == "Minion") {
 					active->move(c, pos, active->get_hand(), active->get_graveyard());
-					active->display_graveyard();
 				} else {
 					active->get_hand().remove(pos);
 				}
@@ -108,19 +108,32 @@ void Controller::play(istream &in, bool testing) {
 		} else if (command == "attack") {
 			// cout << command << endl;
 			int pos1, pos2;
-			if (commands.size() == 3) {
-				pos1 = stoi(commands[1]);
-				pos2 = stoi(commands[2]);
-				cout << pos1 << pos2 << endl;
-			} else if (commands.size() == 2) {
-				pos1 = stoi(commands[1]);
-				cout << pos1 << endl;
+			pos1 = stoi(commands[1]);
+			Card *m1 = active->get_board().find(pos1);
+			if (m1->get_actions() > 0 || testing) {
+				if (commands.size() == 3) {
+					pos2 = stoi(commands[2]);
+					Card *m2 = non_active->get_board().find(pos2);
+
+					m2->take_damage(m1->getStrength());
+					m1->take_damage(m2->getStrength());
+
+					if (m1->getDefense() <= 0) active->move(m1, pos1, active->get_board(), active->get_graveyard());
+					if (m2->getDefense() <= 0) non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
+				
+
+				} else if (commands.size() == 2) {
+					if (non_active->take_damage(m1->getStrength())) {
+						return;
+					}
+				}
+
+				if (!testing) m1->use_action();
 			}
 		} else if (command == "play") {
 			cout << command << endl;
 			int pos = stoi(commands[1]);
 			Card *c = active->get_hand().find(pos);
-			cout << c->getCost() << endl;
 			if (c->getCost() <= active->get_magic() || testing) {
 				active->move(c, pos, active->get_hand(), active->get_board());
 				if (!testing) active->spend_magic(c->getCost());
@@ -139,7 +152,10 @@ void Controller::play(istream &in, bool testing) {
 		} else if (command == "board") {
 			// cout << command << endl;
 			active->display_board();
-		} else {
+		} else if (command == "graveyard") {
+			active->display_graveyard();
+		}	
+		else {
 			continue;
 		}
 	}
@@ -149,6 +165,8 @@ void Controller::play(istream &in, bool testing) {
 void Controller::turn() {
 	active->add_magic(1);
 	active->draw(1);
+	active->reset_minion_actions();
+	notifyObservers();
 	//active->display_hand();
 	//cout << endl << endl << endl;
 	//active->display_deck();
@@ -158,7 +176,9 @@ void Controller::turn() {
 void Controller::flip_active() {
 	if (active == &p1) {
 		active = &p2;
+		non_active = &p1;
 	} else {
 		active = &p1;
+		non_active = &p2;
 	}
 }

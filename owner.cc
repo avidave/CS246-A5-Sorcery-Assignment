@@ -102,6 +102,16 @@ void Owner::import_deck(string file) {
 int Owner::get_magic() { return magic; }
 int Owner::get_life() { return life; }
 
+bool Owner::take_damage(int i) {
+	life -= i;
+	if (life < 0) return true;
+	else return false;
+}	
+
+void Owner::reset_minion_actions() {
+	board.reset_minion_actions();
+}
+
 bool Owner::draw(int i) {
 	for (int x = 0; x < i; x++) {
 	// Note, we remove from the back of a deck
@@ -144,20 +154,20 @@ Hand &Owner::get_hand() { return hand; }
 Board &Owner::get_board() { return board; }
 Graveyard &Owner::get_graveyard() { return graveyard; }
 
-void Owner::display_deck() {
-	cout << deck.display();
+vector<card_template_t> Owner::display_deck() {
+	return deck.display();
 }
 
-void Owner::display_hand() {
-	cout << hand.display();
+vector<card_template_t> Owner::display_hand() {
+	return hand.display();
 }
 
-void Owner::display_board() {
-	cout << board.display();
+vector<card_template_t> Owner::display_board() {
+	return board.display();
 }
 
-void Owner::display_graveyard() {
-	cout << graveyard.display();
+vector<card_template_t> Owner::display_graveyard() {
+	return graveyard.display();
 }
 
 string Owner::getName() { return name; }

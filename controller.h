@@ -6,6 +6,8 @@
 #include "owner.h"
 #include "deck.h"
 #include "trigger.h"
+#include "view.h"
+#include "textview.h"
 
 using namespace std;
 
@@ -13,6 +15,7 @@ class Controller : public Subject {
 	Owner p1;
 	Owner p2;
 	Owner *active = &p1;
+	Owner *non_active = &p2;
 	vector<Trigger> triggers;
 
 	public:
