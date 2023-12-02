@@ -5,6 +5,7 @@
 #include "deck.h"
 #include "hand.h"
 #include "card.h"
+#include "trigger.h"
 #include <memory>
 using namespace std;
 
@@ -33,6 +34,7 @@ class Owner {
 		void display_hand();
 		string getName();
 		int getNum();
+		void setTrigger(Trigger &t);
 };
 
 #endif

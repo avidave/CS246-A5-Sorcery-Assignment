@@ -22,3 +22,6 @@ int Card::getDefense() { return defense; }
 string Card::getAbility() { return ability_txt; }
 int Card::getAbilityCost() { return ability_cost; }
 // string Card::getType() { return "Generic"; }
+void Card::notify() {
+	cout << "WEEEEEEEEEEEEEEEEEEEE" << endl;
+}

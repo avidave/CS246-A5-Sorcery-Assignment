@@ -2,9 +2,10 @@
 #define _CARD_H_
 
 #include <string>
+#include "observer.h"
 
 using namespace std;
-class Card {
+class Card : public Observer {
 	protected:
 		string name;
 		int cost, attack, defense;
@@ -24,6 +25,7 @@ class Card {
 		virtual int getStrength();
 		virtual int getDefense();
 		virtual string getType() = 0;
+		void notify() override;
 		//virtual bool activate();
 		//virtual void setActions(int a);
 };

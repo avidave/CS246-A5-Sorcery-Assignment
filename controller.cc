@@ -6,7 +6,12 @@
 
 using namespace std;
 
-Controller::Controller(istream &in, Owner p1, Owner p2) : in{in}, p1{move(p1)}, p2{move(p2)} {}
+Controller::Controller(istream &in, Owner p1, Owner p2) : in{in}, p1{move(p1)}, p2{move(p2)} {
+
+	for (int i = 0; i < 4; ++i) {
+		triggers.emplace_back(Trigger{i});
+	}
+}
 Controller::~Controller() {}
 
 void Controller::echoName(int n) {
@@ -14,6 +19,13 @@ void Controller::echoName(int n) {
 		cout << p1.getName() << endl;
 	} else {
 		cout << p2.getName() << endl;
+	}
+}
+
+void Controller::trigger(int n) {
+	for (Trigger t : triggers) {
+		if (t.getState() == n) t.notifyObservers();
+		break;
 	}
 }
 
@@ -26,6 +38,12 @@ void Controller::start() {
 	//p1.display_deck();
 	//cout << endl << endl << endl;
 	// p2.display_deck();
+
+	for (int i = 0; i < 4; ++i) {
+		p1.setTrigger(triggers.at(i));
+		p2.setTrigger(triggers.at(i));
+		triggers.at(i).notifyObservers();
+	}
 
 	p1.draw(5);
 	p2.draw(5);

@@ -127,3 +127,9 @@ void Owner::display_hand() {
 
 string Owner::getName() { return name; }
 int Owner::getNum() { return num; }
+
+void Owner::setTrigger(Trigger &t) {
+	for (int i = 0; i < allCards.size(); ++i) {
+		t.attach(allCards.at(i).get());
+	}
+}
