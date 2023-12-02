@@ -13,6 +13,10 @@ Owner::Owner(string name, int num): name{name}, num{num} {
 }
 Owner::~Owner() {}
 
+void Owner::shuffle_deck() {
+	deck.shuffle();
+}
+
 unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Minion") {
 		// unique_ptr<Card> temp = make_unique<Minion>()

@@ -20,6 +20,7 @@ class Owner {
 		Owner &operator=(const Owner &o) = delete;
 		Owner(Owner&& o) = default;
 		Owner &operator=(Owner &&o) = default;
+		void shuffle_deck();
 		unique_ptr<Card> create_card(vector<string> info);
 		void import_deck(string file="default.deck");
 		void display_deck();

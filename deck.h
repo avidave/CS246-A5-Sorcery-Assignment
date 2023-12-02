@@ -12,6 +12,7 @@ using namespace std;
 class Deck : public Collection {
 	public:
 		Deck();
+		void shuffle();
 		bool add(Card *c) override;
 };
 
