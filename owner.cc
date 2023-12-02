@@ -83,7 +83,7 @@ void Owner::import_deck(string file) {
 
 		if (card_info.size() == 1) card_info.emplace_back("1");
 		auto c = create_card(card_info);
-		allCards.emplace_back(move(c));
+		allCards.emplace_back(std::move(c));
 		deck.add(allCards.back().get());
 		card_info.clear();
 
@@ -99,6 +99,9 @@ void Owner::import_deck(string file) {
 	// cout << deck.display();
 }
 
+int Owner::get_magic() { return magic; }
+int Owner::get_life() { return life; }
+
 bool Owner::draw(int i) {
 	for (int x = 0; x < i; x++) {
 	// Note, we remove from the back of a deck
@@ -113,9 +116,33 @@ bool Owner::draw(int i) {
 	return true;
 }
 
+bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
+	// Move Card from col1 to col2
+	// Card* c = col1.find(i);
+	cout << c->getName() << endl;
+	// col1.remove(i);
+	if (col2.add(c)) {
+		col1.remove(pos);
+		return true;
+	}
+	else {
+		cout << "Cannot make that move" << endl;
+		return false;
+	}
+	
+}
+
 void Owner::add_magic(int i) {
 	magic += i;
 }
+
+void Owner::spend_magic(int i) {
+	magic -= i;
+}
+
+Hand &Owner::get_hand() { return hand; }
+Board &Owner::get_board() { return board; }
+Graveyard &Owner::get_graveyard() { return graveyard; }
 
 void Owner::display_deck() {
 	cout << deck.display();
@@ -123,6 +150,14 @@ void Owner::display_deck() {
 
 void Owner::display_hand() {
 	cout << hand.display();
+}
+
+void Owner::display_board() {
+	cout << board.display();
+}
+
+void Owner::display_graveyard() {
+	cout << graveyard.display();
 }
 
 string Owner::getName() { return name; }

@@ -50,8 +50,24 @@ void Controller::start() {
 }
 
 void Controller::play(istream &in, bool testing) {
-	string command;
-	while (in >> command) {
+	string line;
+	while (getline(in, line)) {
+		vector<string> commands;
+		string temp = "";
+		for (int i = 0; i < line.length(); ++i) {
+			if (line[i] == ' ') {
+				commands.emplace_back(temp);
+				temp = "";
+			}
+			else {
+				temp += line[i];
+			}
+		}
+		commands.emplace_back(temp);
+		string command;
+		if (commands.size() > 0) command = commands[0];
+		else continue;
+
 		if (command == "help") {
 			cout << "Commands: ";
 			cout << "help -- Display this message." << endl;
@@ -66,17 +82,49 @@ void Controller::play(istream &in, bool testing) {
 			cout << "\t  board -- Describe all cards on the board." << endl;
 		} else if (command == "end") {
 			cout << command << endl;
+			flip_active();
+			turn();
 		} else if (command == "quit") {
 			//cout << command << endl;
 			return;
 		} else if (command == "draw") {
-			if (testing) cout << command << endl;
+			if (testing) {
+				cout << command << endl;
+				active->draw(1);
+			}
+
 		} else if (command == "discard") {
-			if (testing) cout << command << endl;
+			if (testing) {
+				cout << command << endl;
+				int pos = stoi(commands[1]);
+				Card *c = active->get_hand().find(pos);
+				if (c->getType() == "Minion") {
+					active->move(c, pos, active->get_hand(), active->get_graveyard());
+					active->display_graveyard();
+				} else {
+					active->get_hand().remove(pos);
+				}
+			}
 		} else if (command == "attack") {
-			cout << command << endl;
+			// cout << command << endl;
+			int pos1, pos2;
+			if (commands.size() == 3) {
+				pos1 = stoi(commands[1]);
+				pos2 = stoi(commands[2]);
+				cout << pos1 << pos2 << endl;
+			} else if (commands.size() == 2) {
+				pos1 = stoi(commands[1]);
+				cout << pos1 << endl;
+			}
 		} else if (command == "play") {
 			cout << command << endl;
+			int pos = stoi(commands[1]);
+			Card *c = active->get_hand().find(pos);
+			cout << c->getCost() << endl;
+			if (c->getCost() <= active->get_magic() || testing) {
+				active->move(c, pos, active->get_hand(), active->get_board());
+				if (!testing) active->spend_magic(c->getCost());
+			}
 		} else if (command == "use") {
 			cout << command << endl;
 		} else if (command == "inspect") {
@@ -84,9 +132,13 @@ void Controller::play(istream &in, bool testing) {
 		} else if (command == "describe") {
 			cout << command << endl;
 		} else if (command == "hand") {
-			cout << command << endl;
+			// cout << command << endl;
+			cout << active->get_life() << endl;
+			cout << active->get_magic() << endl;
+			active->display_hand();
 		} else if (command == "board") {
-			cout << command << endl;
+			// cout << command << endl;
+			active->display_board();
 		} else {
 			continue;
 		}
@@ -97,9 +149,10 @@ void Controller::play(istream &in, bool testing) {
 void Controller::turn() {
 	active->add_magic(1);
 	active->draw(1);
-	active->display_hand();
-	cout << endl << endl << endl;
-	active->display_deck();
+	//active->display_hand();
+	//cout << endl << endl << endl;
+	//active->display_deck();
+	//cout << endl << endl << endl;
 }
 
 void Controller::flip_active() {
