@@ -4,6 +4,7 @@
 #include <string>
 #include "observer.h"
 #include "trigger.h"
+#include "ascii_graphics.h"
 
 using namespace std;
 class Card : public Observer {
@@ -24,7 +25,6 @@ class Card : public Observer {
 		string getAbility();
 		int getAbilityCost();
 		void attach(Trigger &t);
-		virtual string display();
 		virtual int getStrength();
 		virtual int getDefense();
 		int get_actions();
@@ -33,6 +33,7 @@ class Card : public Observer {
 		void use_action();
 		virtual string getType() = 0;
 		void notify() override;
+		virtual card_template_t display() = 0;
 		//virtual bool activate();
 		//virtual void setActions(int a);
 };

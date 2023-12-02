@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "card.h"
+#include "ascii_graphics.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Collection {
 	public:
 		~Collection();
 		virtual bool add(Card *c) = 0;
-		string display();
+		virtual vector<card_template_t> display() = 0;
 		bool remove(int n);
 		void pop_back();
 		Card* find(int n);

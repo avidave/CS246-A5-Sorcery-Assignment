@@ -168,8 +168,10 @@ void Controller::turn() {
 	active->reset_minion_actions();
 	notifyObservers();
 	//active->display_hand();
-	//cout << endl << endl << endl;
+	notifyObservers();
+	cout << endl << endl << endl;
 	//active->display_deck();
+	notifyObservers();
 	//cout << endl << endl << endl;
 }
 

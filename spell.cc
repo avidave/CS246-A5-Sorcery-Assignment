@@ -7,16 +7,7 @@ Spell::Spell(string name, int cost) : Card{name, cost} {}
 Spell::Spell(string name, int cost, string ability_txt) : Card{name, cost, ability_txt} {}
 string Spell::getType() { return "Spell"; }
 
-string Spell::display() {
-	string s = name + " " + to_string(cost) + " " + getType();
-	if (ability_txt != "") s += "\n" + ability_txt;
-	if (ability_cost > 0) s += " " + to_string(ability_cost);
-	return s;
+card_template_t Spell::display() {
+	
+	return display_spell(getName(), getCost(), getAbility());;
 }
-//bool Spell::activate() {
-
-//}
-
-//void Spell::setActions(int a) {
-
-//}

@@ -13,6 +13,7 @@ class Hand : public Collection {
 	public:
 		Hand();
 		bool add(Card *c) override;
+		vector<card_template_t> display() override;
 };
 
 
