@@ -1,0 +1,6 @@
+1
+Minion
+0
+1
+Deal 1 damage to target minion.
+1

@@ -1,0 +1,3 @@
+0
+Enchantment
+Enchanted minion's activated ability costs 2 more

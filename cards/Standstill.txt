@@ -1,0 +1,5 @@
+3
+Ritual
+Whenever a minion enters play, destroy it
+2
+4

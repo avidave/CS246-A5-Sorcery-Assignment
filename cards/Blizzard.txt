@@ -1,0 +1,3 @@
+3
+Spell
+Deal 2 damage to all minions
