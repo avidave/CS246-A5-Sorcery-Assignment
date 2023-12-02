@@ -14,6 +14,7 @@ class Deck : public Collection {
 		Deck();
 		void shuffle();
 		bool add(Card *c) override;
+		vector<card_template_t> display() override;
 };
 
 

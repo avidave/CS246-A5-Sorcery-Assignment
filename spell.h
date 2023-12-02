@@ -12,7 +12,7 @@ class Spell : public Card {
 	    Spell(string name, int cost);
 	    Spell(string name, int cost, string ability_txt);
 	    string getType() override;
-	    string display() override;
+	    card_template_t display() override;
         //bool activate();
         //void setActions(int a);
 };

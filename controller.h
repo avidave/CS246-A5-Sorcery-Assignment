@@ -6,6 +6,8 @@
 #include "owner.h"
 #include "deck.h"
 #include "trigger.h"
+#include "view.h"
+#include "textview.h"
 
 using namespace std;
 

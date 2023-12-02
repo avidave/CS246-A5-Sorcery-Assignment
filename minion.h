@@ -14,7 +14,7 @@ class Minion : public Card {
 		int getStrength() override;
 		int getDefense() override;
 		string getType() override;
-		string display() override;
+		card_template_t display() override;
 };
 
 #endif

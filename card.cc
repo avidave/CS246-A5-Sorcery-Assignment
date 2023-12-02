@@ -10,10 +10,10 @@ Card::Card(string name, int cost, string ability_txt) : name{name}, cost{cost}, 
 Card::Card(string name, int cost, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost} {}
 Card::Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{ability_cost} {}
 
-string Card::display() {
-	return name + " " + to_string(cost) + " " + getType();
+// string Card::display() {
+// 	return name + " " + to_string(cost) + " " + getType();
 
-}
+// }
 
 string Card::getName() { return name; }
 int Card::getCost() { return cost; }

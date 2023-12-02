@@ -13,6 +13,7 @@ class Graveyard : public Collection {
 	public:
 		Graveyard();
 		bool add(Card *c) override;
+		vector<card_template_t> display() override;
 };
 
 

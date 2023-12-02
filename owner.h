@@ -9,6 +9,7 @@
 #include "card.h"
 #include "trigger.h"
 #include <memory>
+#include "ascii_graphics.h"
 using namespace std;
 
 class Owner {
@@ -38,10 +39,10 @@ class Owner {
 		bool move(Card *c, int pos,  Collection &col1, Collection &col2);
 		void add_magic(int i);
 		void spend_magic(int i);
-		void display_deck();
-		void display_hand();
-		void display_board();
-		void display_graveyard();
+		vector<card_template_t> display_deck();
+		vector<card_template_t> display_hand();
+		vector<card_template_t> display_board();
+		vector<card_template_t> display_graveyard();
 		Hand &get_hand();
 		Board &get_board();
 		Graveyard &get_graveyard();

@@ -144,20 +144,20 @@ Hand &Owner::get_hand() { return hand; }
 Board &Owner::get_board() { return board; }
 Graveyard &Owner::get_graveyard() { return graveyard; }
 
-void Owner::display_deck() {
-	cout << deck.display();
+vector<card_template_t> Owner::display_deck() {
+	return deck.display();
 }
 
-void Owner::display_hand() {
-	cout << hand.display();
+vector<card_template_t> Owner::display_hand() {
+	return hand.display();
 }
 
-void Owner::display_board() {
-	cout << board.display();
+vector<card_template_t> Owner::display_board() {
+	return board.display();
 }
 
-void Owner::display_graveyard() {
-	cout << graveyard.display();
+vector<card_template_t> Owner::display_graveyard() {
+	return graveyard.display();
 }
 
 string Owner::getName() { return name; }

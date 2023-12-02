@@ -11,6 +11,8 @@ Controller::Controller(Owner p1, Owner p2) : p1{move(p1)}, p2{move(p2)} {
 	for (int i = 0; i < 4; ++i) {
 		triggers.emplace_back(Trigger{i});
 	}
+
+	attach(new TextView{&this->p1, &this->p2});
 }
 Controller::~Controller() {}
 
@@ -150,8 +152,10 @@ void Controller::turn() {
 	active->add_magic(1);
 	active->draw(1);
 	//active->display_hand();
-	//cout << endl << endl << endl;
+	notifyObservers();
+	cout << endl << endl << endl;
 	//active->display_deck();
+	notifyObservers();
 	//cout << endl << endl << endl;
 }
 

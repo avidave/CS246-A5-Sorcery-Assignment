@@ -12,9 +12,7 @@ int Minion::getStrength() { return attack; }
 int Minion::getDefense() { return defense; }
 string Minion::getType() { return "Minion"; }
 
-string Minion::display() {
-	string s = name + " " + to_string(cost) + " " + getType() + " " + to_string(attack) + "/" + to_string(defense);
-	if (ability_txt != "") s += "\n" + ability_txt;
-	if (ability_cost > 0) s += " " + to_string(ability_cost);
-	return s;
+card_template_t Minion::display() {
+
+	return display_minion_no_ability(getName(), getCost(), getStrength(), getDefense());;
 }

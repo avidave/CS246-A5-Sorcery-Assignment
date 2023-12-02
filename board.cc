@@ -13,3 +13,5 @@ bool Board::add(Card *c) {
 	//cout << c->display() << endl;
 	return true;
 }
+
+vector<card_template_t> Board::display() { return {}; }

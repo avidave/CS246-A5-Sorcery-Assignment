@@ -13,6 +13,7 @@ class Board : public Collection {
 	public:
 		Board();
 		bool add(Card *c) override;
+		vector<card_template_t> display() override;
 };
 
 

@@ -12,3 +12,5 @@ bool Graveyard::add(Card *c) {
 	this->Cards.emplace_back(c);
 	return true;
 }
+
+vector<card_template_t> Graveyard::display() { return {}; }
