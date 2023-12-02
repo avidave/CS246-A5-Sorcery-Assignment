@@ -16,7 +16,7 @@ Collection::~Collection() {
 string Collection::display() {
 	string s;
 	for (int i = 0; i < Cards.size(); ++i) {
-		s += Cards[i]->display() + "\n";
+		s += Cards[i]->display() + "\n\n";
 	}
 
 	return s;

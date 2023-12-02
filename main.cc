@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
 	Owner Player1{p1, 1};
 	Owner Player2{p2, 2};
 	Player1.import_deck(deck1);
+	Player1.display_deck();
 	Player2.import_deck(deck2);
 	Controller control{cin, move(Player1), move(Player2)};
 
