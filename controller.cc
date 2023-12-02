@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Controller::Controller(istream &in, Owner p1, Owner p2) : in{in}, p1{move(p1)}, p2{move(p2)} {
+Controller::Controller(Owner p1, Owner p2) : p1{move(p1)}, p2{move(p2)} {
 
 	for (int i = 0; i < 4; ++i) {
 		triggers.emplace_back(Trigger{i});
@@ -47,11 +47,51 @@ void Controller::start() {
 
 	p1.draw(5);
 	p2.draw(5);
+}
 
-	p2.display_hand();
-	cout << endl << endl << endl;
-	p2.display_deck();
-	cout << endl << endl << endl;
+void Controller::play(istream &in, bool testing) {
+	string command;
+	while (in >> command) {
+		if (command == "help") {
+			cout << "Commands: ";
+			cout << "help -- Display this message." << endl;
+			cout << "\t  end -- End the current player’s turn." << endl;
+			cout << "\t  quit -- End the game." << endl;
+			cout << "\t  attack minion other-minion -- Orders minion to attack other-minion." << endl;
+			cout << "\t  attack minion -- Orders minion to attack the opponent." << endl;
+			cout << "\t  play card [target-player target-card] -- Play card, optionally targeting target-card owned by target-player." << endl;
+			cout << "\t  use minion [target-player target-card] -- Use minion’s special ability, optionally targeting target-card owned by target-player." << endl;
+			cout << "\t  inspect minion -- View a minion’s card and all enchantments on that minion." << endl;
+			cout << "\t  hand -- Describe all cards in your hand." << endl;
+			cout << "\t  board -- Describe all cards on the board." << endl;
+		} else if (command == "end") {
+			cout << command << endl;
+		} else if (command == "quit") {
+			//cout << command << endl;
+			return;
+		} else if (command == "draw") {
+			if (testing) cout << command << endl;
+		} else if (command == "discard") {
+			if (testing) cout << command << endl;
+		} else if (command == "attack") {
+			cout << command << endl;
+		} else if (command == "play") {
+			cout << command << endl;
+		} else if (command == "use") {
+			cout << command << endl;
+		} else if (command == "inspect") {
+			cout << command << endl;
+		} else if (command == "describe") {
+			cout << command << endl;
+		} else if (command == "hand") {
+			cout << command << endl;
+		} else if (command == "board") {
+			cout << command << endl;
+		} else {
+			continue;
+		}
+	}
+
 }
 
 void Controller::turn() {

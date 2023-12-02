@@ -10,14 +10,13 @@
 using namespace std;
 
 class Controller : public Subject {
-	istream &in;
 	Owner p1;
 	Owner p2;
 	Owner *active = &p1;
 	vector<Trigger> triggers;
 
 	public:
-		Controller(istream &in, Owner p1, Owner p2);
+		Controller(Owner p1, Owner p2);
 		~Controller();
 
 		void echoName(int n);
@@ -26,6 +25,7 @@ class Controller : public Subject {
 		void start();
 		void turn();
 		void flip_active();
+		void play(istream &in, bool testing);
 		void trigger(int n);
 };
 

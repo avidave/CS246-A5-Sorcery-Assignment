@@ -130,6 +130,7 @@ int Owner::getNum() { return num; }
 
 void Owner::setTrigger(Trigger &t) {
 	for (int i = 0; i < allCards.size(); ++i) {
-		t.attach(allCards.at(i).get());
+		//t.attach(allCards.at(i).get());
+		allCards[i]->attach(t);
 	}
 }

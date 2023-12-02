@@ -3,6 +3,7 @@
 
 #include <string>
 #include "observer.h"
+#include "trigger.h"
 
 using namespace std;
 class Card : public Observer {
@@ -21,6 +22,7 @@ class Card : public Observer {
 		int getCost();
 		string getAbility();
 		int getAbilityCost();
+		void attach(Trigger &t);
 		virtual string display();
 		virtual int getStrength();
 		virtual int getDefense();

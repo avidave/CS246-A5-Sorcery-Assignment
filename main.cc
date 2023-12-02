@@ -56,8 +56,9 @@ int main(int argc, char *argv[]) {
 	Player2.import_deck(deck2);
 	//Player2.shuffle_deck();
 
-	Controller control{cin, move(Player1), move(Player2)};
+	Controller control{move(Player1), move(Player2)};
 	control.start();
+	// control.play(cin, testing);
 	control.turn();
 	control.flip_active();
 	control.turn();
@@ -77,6 +78,7 @@ int main(int argc, char *argv[]) {
 	//control.getActive().import_deck();
 	//control.getActive().display_deck();
 
+	/*
 	string command;
 
 	while (isInit) {
@@ -120,4 +122,5 @@ int main(int argc, char *argv[]) {
 			continue;
 		}
 	}
+	*/
 }
