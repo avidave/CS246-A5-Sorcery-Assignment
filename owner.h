@@ -3,6 +3,7 @@
 
 #include <string>
 #include "deck.h"
+#include "hand.h"
 #include "card.h"
 #include <memory>
 using namespace std;
@@ -11,6 +12,7 @@ class Owner {
 	string name;
 	int num;
 	Deck deck;
+	Hand hand;
 	vector<unique_ptr<Card>> allCards;
 
 	public:
@@ -23,7 +25,9 @@ class Owner {
 		void shuffle_deck();
 		unique_ptr<Card> create_card(vector<string> info);
 		void import_deck(string file="default.deck");
+		bool draw(int i);
 		void display_deck();
+		void display_hand();
 		string getName();
 		int getNum();
 };

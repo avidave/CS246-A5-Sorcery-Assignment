@@ -26,3 +26,15 @@ bool Collection::remove(int i) {
 	Cards.erase(Cards.begin() + i);
 	return true;
 }
+
+void Collection::pop_back() {
+	Cards.pop_back();
+}
+
+Card* Collection::find(int n) {
+	return Cards[n];
+}
+
+int Collection::numCards() {
+	return Cards.size();
+}

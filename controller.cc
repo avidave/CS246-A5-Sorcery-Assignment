@@ -18,3 +18,19 @@ void Controller::echoName(int n) {
 }
 
 Owner& Controller::getActive() { return active; }
+
+void Controller::start() {
+	p1.shuffle_deck();
+	p2.shuffle_deck();
+
+	p1.display_deck();
+	cout << endl << endl << endl;
+	// p2.display_deck();
+
+	p1.draw(5);
+	p2.draw(5);
+
+	p1.display_hand();
+	cout << endl << endl << endl;
+	p1.display_deck();
+}

@@ -20,6 +20,8 @@ class Controller : public Subject {
 
 		void echoName(int n);
 		Owner& getActive();
+
+		void start();
 };
 
 #endif

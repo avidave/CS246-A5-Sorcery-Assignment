@@ -50,13 +50,14 @@ int main(int argc, char *argv[]) {
 
 	Owner Player1{p1, 1};
 	Owner Player2{p2, 2};
+
 	Player1.import_deck(deck1);
-	Player1.display_deck();
-	Player1.shuffle_deck();
-	cout << endl << endl << endl;
-	Player1.display_deck();
+	//Player1.shuffle_deck();
 	Player2.import_deck(deck2);
+	//Player2.shuffle_deck();
+
 	Controller control{cin, move(Player1), move(Player2)};
+	control.start();
 
 	// for (int i = 1; i < 3; i++) {
 	// 	control.echoName(i);

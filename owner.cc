@@ -101,8 +101,26 @@ void Owner::import_deck(string file) {
 	// cout << deck.display();
 }
 
+bool Owner::draw(int i) {
+	for (int x = 0; x < i; x++) {
+	// Note, we remove from the back of a deck
+		if (deck.numCards() <= 0) return false;
+		if (hand.add(deck.find(deck.numCards() - 1))) {
+			deck.pop_back();
+		} else {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void Owner::display_deck() {
 	cout << deck.display();
+}
+
+void Owner::display_hand() {
+	cout << hand.display();
 }
 
 string Owner::getName() { return name; }

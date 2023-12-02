@@ -16,6 +16,9 @@ class Collection {
 		virtual bool add(Card *c) = 0;
 		string display();
 		bool remove(int n);
+		void pop_back();
+		Card* find(int n);
+		int numCards();
 };
 
 #endif
