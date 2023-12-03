@@ -1,3 +1,5 @@
 1
 Spell
 Destroy the top enchantment on target minion
+Destroy
+Enchantment

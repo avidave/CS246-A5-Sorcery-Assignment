@@ -1,3 +1,5 @@
 2
 Spell
 Destroy target minion or ritual
+Destroy
+Minion Ritual

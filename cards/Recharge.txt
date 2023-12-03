@@ -1,3 +1,5 @@
 1
 Spell
 Your ritual gains 3 charges
+Charge
+Ritual

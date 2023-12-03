@@ -10,8 +10,27 @@
 #include <fstream>
 #include <iostream>
 
+vector<string> split(string s) {
+	vector<string> vec;
+	string temp = "";
+	for (int i = 0; i < s.length(); ++i) {
+		if (s[i] == ' ') {
+			vec.emplace_back(temp);
+			temp = "";
+		}
+		else {
+			temp += s[i];
+		}
+	}
+	vec.emplace_back(temp);
+
+	return vec;
+}
+
+
 Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {
-	ritual = new Spell{"unknown", 0};
+	//ritual_slot = make_unique<Card>(Spell{"unknown", 0});
+	ritual = nullptr; //new Spell{"unknown", 0};
 }
 Owner::~Owner() {}
 
@@ -29,6 +48,10 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		else return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4])});
 	}
 	if (info.size() >= 3 && info[2] == "Spell") {
+		vector<string> type = split(info[4]);
+		vector<string> targets = split(info[5]);
+		cout << type[0] << endl;
+		cout << targets[0] << endl;
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
 	}
 

@@ -17,6 +17,7 @@ class Controller : public Subject {
 	Owner *active = &p1;
 	Owner *non_active = &p2;
 	vector<Trigger> triggers;
+	unique_ptr<TextView> tv;
 
 	public:
 		Controller(Owner p1, Owner p2);

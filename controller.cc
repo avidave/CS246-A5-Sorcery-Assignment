@@ -12,7 +12,9 @@ Controller::Controller(Owner p1, Owner p2) : p1{move(p1)}, p2{move(p2)} {
 		triggers.emplace_back(Trigger{i});
 	}
 
-	attach(new TextView{&this->p1, &this->p2});
+	tv = make_unique<TextView>(TextView{&this->p1, &this->p2});
+
+	attach(tv.get());
 }
 Controller::~Controller() {}
 
