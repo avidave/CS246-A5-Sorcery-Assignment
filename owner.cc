@@ -4,6 +4,7 @@
 #include "card.h"
 #include "minion.h"
 #include "spell.h"
+#include "ritual.h"
 #include <memory>
 #include <fstream>
 #include <iostream>
@@ -26,6 +27,10 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	}
 	if (info.size() >= 3 && info[2] == "Spell") {
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
+	}
+	if (info.size() >= 6 && info[2] == "Ritual") {
+		cout << info[0] << endl << info[1] << endl << info[2] << endl << info[3] << endl << info[4] << endl << info[5] << endl;
+		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
 	// return make_unique<Card>(Card{info[0], stoi(info[1])});
 	return make_unique<Spell>(Spell{info[0], stoi(info[1])});

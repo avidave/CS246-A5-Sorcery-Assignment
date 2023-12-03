@@ -14,5 +14,5 @@ string Minion::getType() { return "Minion"; }
 
 card_template_t Minion::display() {
 
-	return display_minion_no_ability(getName(), getCost(), getStrength(), getDefense());;
+	return display_minion_no_ability(getName(), getCost(), getStrength(), getDefense());
 }
