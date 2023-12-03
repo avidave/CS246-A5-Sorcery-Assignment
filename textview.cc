@@ -6,8 +6,11 @@ using namespace std;
 TextView::TextView (Owner *p1, Owner *p2) : View{p1, p2} {}
 
 void TextView::notify() {
-    hand(1);
-    hand(2);
+    board();
+}
+
+void TextView::notify(int n) {
+    hand(n);
 }
 
 void TextView::print() {}

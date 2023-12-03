@@ -13,6 +13,7 @@ class Subject {
 		void attach(Observer *o);
 		void detach(Observer *o);
 		void notifyObservers();
+		void notifyObservers(int n);
 		virtual ~Subject() = 0;
 };
 

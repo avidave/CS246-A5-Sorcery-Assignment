@@ -134,8 +134,18 @@ void Controller::play(istream &in, bool testing) {
 			cout << command << endl;
 			int pos = stoi(commands[1]);
 			Card *c = active->get_hand().find(pos);
-			if (c->getCost() <= active->get_magic() || testing) {
+			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				active->move(c, pos, active->get_hand(), active->get_board());
+				if (!testing) active->spend_magic(c->getCost());
+			}
+			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
+				cout << c->getName() << endl;
+				// col1.remove(i);
+				active->move(c, pos, active->get_hand(), active->get_board());
+				Card *ritual = active->get_ritual();
+				if (ritual->getName() == "unknown") {
+					ritual = c;
+				}
 				if (!testing) active->spend_magic(c->getCost());
 			}
 		} else if (command == "use") {
@@ -148,10 +158,13 @@ void Controller::play(istream &in, bool testing) {
 			// cout << command << endl;
 			cout << active->get_life() << endl;
 			cout << active->get_magic() << endl;
-			active->display_hand();
+			//active->display_hand();
+			notifyObservers(active->getNum());
 		} else if (command == "board") {
 			// cout << command << endl;
-			active->display_board();
+			notifyObservers();
+			//active->display_board();
+			//notifyObservers();
 		} else if (command == "graveyard") {
 			active->display_graveyard();
 		}	
@@ -166,12 +179,12 @@ void Controller::turn() {
 	active->add_magic(1);
 	active->draw(1);
 	active->reset_minion_actions();
-	notifyObservers();
+	//notifyObservers(active->getNum());
 	//active->display_hand();
-	notifyObservers();
+	notifyObservers(active->getNum());
 	cout << endl << endl << endl;
 	//active->display_deck();
-	notifyObservers();
+	notifyObservers(active->getNum());
 	//cout << endl << endl << endl;
 }
 

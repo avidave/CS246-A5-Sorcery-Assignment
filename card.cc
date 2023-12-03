@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Card::Card(string name, int cost) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{""}, ability_cost{0} {}
-Card::Card(string name, int cost, int attack, int defense) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{""}, ability_cost{0} {}
-Card::Card(string name, int cost, string ability_txt) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{0} {}
-Card::Card(string name, int cost, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost} {}
-Card::Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{ability_cost} {}
-
+Card::Card(string name, int cost) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{""}, ability_cost{0}, actions{1} {}
+Card::Card(string name, int cost, int attack, int defense) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{""}, ability_cost{0}, actions{1} {}
+Card::Card(string name, int cost, string ability_txt) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{0}, actions{1} {}
+Card::Card(string name, int cost, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{1} {}
+Card::Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{1} {}
+Card::Card(string name, int cost, string ability_txt, int ability_cost, int actions) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{actions} {}
 // string Card::display() {
 // 	return name + " " + to_string(cost) + " " + getType();
 
@@ -41,4 +41,7 @@ void Card::attach(Trigger &t) {
 }
 void Card::notify() {
 	// cout << "WEEEEEEEEEEEEEEEEEEEE" << endl;
+}
+void Card::notify(int n) {
+	// This function should only have code for view, not card.
 }
