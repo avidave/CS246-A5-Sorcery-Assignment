@@ -28,7 +28,7 @@ void View::hand(int p) {
 void View::board() {
     auto deck1 = p1->get_board();
     auto deck2 = p2->get_board();
-    cout << deck1.numCards() << endl;
+    //cout << deck1.numCards() << endl;
     card_template_t p1Card = display_player_card(1,p1->getName(),p1->get_life(),p1->get_magic());
     card_template_t p2Card = display_player_card(2,p2->getName(),p2->get_life(),p2->get_magic());
 
@@ -94,11 +94,7 @@ void View::board() {
 
     int height = minions1.at(0).size();
 
-    cout << height << minions1.at(1).at(10) << endl;
-
     for (int i = 0; i < height; i++) {
-
-        cout << i << endl;
 
         s += EXTERNAL_BORDER_CHAR_UP_DOWN;
 
