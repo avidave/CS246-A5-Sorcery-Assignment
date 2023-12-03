@@ -3,13 +3,16 @@
 #include "deck.h"
 #include "card.h"
 #include "minion.h"
+#include "ritual.h"
 #include "spell.h"
 #include "ritual.h"
 #include <memory>
 #include <fstream>
 #include <iostream>
 
-Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {}
+Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {
+	ritual = new Spell{"unknown", 0};
+}
 Owner::~Owner() {}
 
 void Owner::shuffle_deck() {
@@ -28,10 +31,15 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Spell") {
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
 	}
-	if (info.size() >= 6 && info[2] == "Ritual") {
-		cout << info[0] << endl << info[1] << endl << info[2] << endl << info[3] << endl << info[4] << endl << info[5] << endl;
-		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
+
+	if (info.size() == 5 && info[2] == "Ritual") {
+		return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
+		//return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
+	//Ritual: 0, 3 : 1, Ritual : 2, 
+	// Whenever a minion enters play, destroy it : 3
+	// 2 : 4, 4 : 5
+	//Ritual(string name, int cost, string ability_txt, int ability_cost, int actions);
 	// return make_unique<Card>(Card{info[0], stoi(info[1])});
 	return make_unique<Spell>(Spell{info[0], stoi(info[1])});
 	
@@ -158,6 +166,7 @@ void Owner::spend_magic(int i) {
 Hand &Owner::get_hand() { return hand; }
 Board &Owner::get_board() { return board; }
 Graveyard &Owner::get_graveyard() { return graveyard; }
+Card *Owner::get_ritual() { return ritual; }
 
 vector<card_template_t> Owner::display_deck() {
 	return deck.display();

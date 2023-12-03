@@ -21,6 +21,7 @@ class Card : public Observer {
 		Card(string name, int cost, string ability_txt, int ability_cost);
 		Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost);
 		Card(string name, int cost, string ability_txt, int ability_cost, int actions);
+
 		string getName();
 		int getCost();
 		string getAbility();
@@ -34,6 +35,7 @@ class Card : public Observer {
 		void use_action();
 		virtual string getType() = 0;
 		void notify() override;
+		void notify(int n) override;
 		virtual card_template_t display() = 0;
 		//virtual bool activate();
 		//virtual void setActions(int a);

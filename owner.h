@@ -21,6 +21,7 @@ class Owner {
 	Hand hand;
 	Board board;
 	Graveyard graveyard;
+	Card *ritual;
 	vector<unique_ptr<Card>> allCards;
 
 	public:
@@ -47,6 +48,7 @@ class Owner {
 		vector<card_template_t> display_graveyard();
 		Hand &get_hand();
 		Board &get_board();
+		Card *get_ritual();
 		Graveyard &get_graveyard();
 		string getName();
 		int getNum();

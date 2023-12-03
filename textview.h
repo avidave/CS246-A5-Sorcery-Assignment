@@ -12,6 +12,7 @@ class TextView : public View {
     public:
         TextView(Owner *p1, Owner *p2);
         void notify();
+        void notify(int n);
         void print();
 };
 

@@ -43,3 +43,6 @@ void Card::attach(Trigger &t) {
 void Card::notify() {
 	// cout << "WEEEEEEEEEEEEEEEEEEEE" << endl;
 }
+void Card::notify(int n) {
+	// This function should only have code for view, not card.
+}
