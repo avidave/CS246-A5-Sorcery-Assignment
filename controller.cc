@@ -83,7 +83,7 @@ void Controller::play(istream &in, bool testing) {
 			cout << "\t  hand -- Describe all cards in your hand." << endl;
 			cout << "\t  board -- Describe all cards on the board." << endl;
 		} else if (command == "end") {
-			cout << command << endl;
+			// cout << command << endl;
 			flip_active();
 			turn();
 		} else if (command == "quit") {
@@ -91,7 +91,7 @@ void Controller::play(istream &in, bool testing) {
 			return;
 		} else if (command == "draw") {
 			if (testing) {
-				cout << command << endl;
+				// cout << command << endl;
 				active->draw(1);
 			}
 
@@ -131,7 +131,7 @@ void Controller::play(istream &in, bool testing) {
 				if (!testing) m1->use_action();
 			}
 		} else if (command == "play") {
-			cout << command << endl;
+			// cout << command << endl;
 			int pos = stoi(commands[1]);
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
@@ -158,8 +158,8 @@ void Controller::play(istream &in, bool testing) {
 			// cout << command << endl;
 			cout << active->get_life() << endl;
 			cout << active->get_magic() << endl;
-			//active->display_hand();
 			notifyObservers(active->getNum());
+			//active->display_hand();
 		} else if (command == "board") {
 			// cout << command << endl;
 			notifyObservers();
@@ -181,10 +181,10 @@ void Controller::turn() {
 	active->reset_minion_actions();
 	//notifyObservers(active->getNum());
 	//active->display_hand();
-	notifyObservers(active->getNum());
-	cout << endl << endl << endl;
+	// notifyObservers(active->getNum());
+	// cout << endl << endl << endl;
 	//active->display_deck();
-	notifyObservers(active->getNum());
+	// notifyObservers(active->getNum());
 	//cout << endl << endl << endl;
 }
 

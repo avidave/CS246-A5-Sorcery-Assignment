@@ -14,5 +14,11 @@ string Minion::getType() { return "Minion"; }
 
 card_template_t Minion::display() {
 
-	return display_minion_no_ability(getName(), getCost(), getStrength(), getDefense());
+	if (ability_txt == "") {
+		return display_minion_no_ability(getName(), getCost(), getStrength(), getDefense());
+	} else if (ability_cost == 0) {
+		return display_minion_triggered_ability(getName(), getCost(), getStrength(), getDefense(), ability_txt);
+	} else {
+		return display_minion_activated_ability(getName(), getCost(), getStrength(), getDefense(), ability_cost, ability_txt);
+	}
 }

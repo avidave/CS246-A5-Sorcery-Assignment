@@ -32,9 +32,9 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
 	}
 
-	if (info.size() == 5 && info[2] == "Ritual") {
-		return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
-		//return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
+	if (info.size() == 6 && info[2] == "Ritual") {
+		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
+		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
 	//Ritual: 0, 3 : 1, Ritual : 2, 
 	// Whenever a minion enters play, destroy it : 3
