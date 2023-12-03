@@ -5,13 +5,21 @@
 #include "card.h"
 #include <iostream>
 
-Board::Board() : Collection{} {}
+Board::Board() : Collection{}, nMinions{0}, ritual{nullptr} {}
 
 bool Board::add(Card *c) {
-	if (Cards.size() >= 5 || c->getType() != "Minion") return false;
+	if (c->getType() == "Minion") ++nMinions;
+	if ((nMinions >= 5 && c->getType() != "Minion") || (c->getType() != "Minion" || c->getType() != "Ritual")) return false;
 	this->Cards.emplace_back(c);
 	//cout << c->display() << endl;
 	return true;
+}
+
+Card *Board::get_ritual() { return ritual; }
+
+void Board::set_ritual(Card *r) {
+	if (ritual) delete ritual;
+	ritual = r; 
 }
 
 void Board::reset_minion_actions() {

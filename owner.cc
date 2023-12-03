@@ -30,7 +30,7 @@ vector<string> split(string s) {
 
 Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {
 	//ritual_slot = make_unique<Card>(Spell{"unknown", 0});
-	ritual = nullptr; //new Spell{"unknown", 0};
+	//ritual = nullptr; //new Spell{"unknown", 0};
 }
 Owner::~Owner() {}
 
@@ -59,10 +59,6 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
 		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
-	//Ritual: 0, 3 : 1, Ritual : 2, 
-	// Whenever a minion enters play, destroy it : 3
-	// 2 : 4, 4 : 5
-	//Ritual(string name, int cost, string ability_txt, int ability_cost, int actions);
 	// return make_unique<Card>(Card{info[0], stoi(info[1])});
 	return make_unique<Spell>(Spell{info[0], stoi(info[1])});
 	
@@ -77,36 +73,6 @@ void Owner::import_deck(string file) {
 	string n;
 
 	while (getline(names, n)) {
-
-		// string fName = name;
-		// fName.at(0) += 32;
-		// ifstream card{fName + ".txt"};
-		// string input;
-		// int cost;
-		// string type;
-		// // while(card >> l) {
-		// // 	cout << l << endl;
-		// // }
-		// card.ignore();
-		// card.ignore();
-		// card.ignore();
-		// card.ignore();
-
-		// card >> cost;
-
-		// card.ignore();
-		// card.ignore();
-		// card.ignore();
-
-		// card >> type;
-
-		// if (type == "Spell") {
-
-		// } else if (type == "Minion") {
-
-		// } else if (type == "Enchantment") {
-
-		// } else if (type == "Ritual")
 
 		//cout << n << endl;
 		ifstream card {"./cards/" + n + ".txt"};
@@ -189,7 +155,7 @@ void Owner::spend_magic(int i) {
 Hand &Owner::get_hand() { return hand; }
 Board &Owner::get_board() { return board; }
 Graveyard &Owner::get_graveyard() { return graveyard; }
-Card *Owner::get_ritual() { return ritual; }
+//Card *Owner::get_ritual() { return ritual; }
 
 vector<card_template_t> Owner::display_deck() {
 	return deck.display();

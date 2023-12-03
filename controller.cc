@@ -141,13 +141,8 @@ void Controller::play(istream &in, bool testing) {
 				if (!testing) active->spend_magic(c->getCost());
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
-				cout << c->getName() << endl;
-				// col1.remove(i);
-				active->move(c, pos, active->get_hand(), active->get_board());
-				Card *ritual = active->get_ritual();
-				if (ritual->getName() == "unknown") {
-					ritual = c;
-				}
+				
+				active->get_board().set_ritual(c);
 				if (!testing) active->spend_magic(c->getCost());
 			}
 		} else if (command == "use") {
