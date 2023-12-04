@@ -39,8 +39,11 @@ class Owner {
 		int get_magic();
 		void reset_minion_actions();
 		bool take_damage(int i);
+		bool damage_minion(int p, int i);
+		void damage_all_minions(int i);
 		bool draw(int i);
 		bool move(Card *c, int pos,  Collection &col1, Collection &col2);
+		bool resurrect();
 		void add_magic(int i);
 		void spend_magic(int i);
 		vector<card_template_t> display_deck();

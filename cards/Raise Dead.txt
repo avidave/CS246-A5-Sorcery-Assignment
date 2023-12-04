@@ -1,5 +1,5 @@
 1
 Spell
-Resurrect the top minion in your graveyard and set its defense to 1
-Move Graveyard Board
-Minion
+Resurrect the top minion in your graveyard and set its defence to 1
+Move
+Minion Graveyard Board

@@ -3,6 +3,7 @@
 #include "controller.h"
 #include "owner.h"
 #include "deck.h"
+#include "spell.h"
 
 using namespace std;
 
@@ -116,12 +117,14 @@ void Controller::play(istream &in, bool testing) {
 				if (commands.size() == 3) {
 					pos2 = stoi(commands[2]);
 					Card *m2 = non_active->get_board().find(pos2);
+					non_active->damage_minion(pos2, m1->getStrength());
+					active->damage_minion(pos1, m2->getStrength());
 
-					m2->take_damage(m1->getStrength());
-					m1->take_damage(m2->getStrength());
+					//m2->take_damage(m1->getStrength());
+					//m1->take_damage(m2->getStrength());
 
-					if (m1->getDefense() <= 0) active->move(m1, pos1, active->get_board(), active->get_graveyard());
-					if (m2->getDefense() <= 0) non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
+					//if (m1->getDefense() <= 0) active->move(m1, pos1, active->get_board(), active->get_graveyard());
+					//if (m2->getDefense() <= 0) non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
 				
 
 				} else if (commands.size() == 2) {
@@ -135,6 +138,16 @@ void Controller::play(istream &in, bool testing) {
 		} else if (command == "play") {
 			// cout << command << endl;
 			int pos = stoi(commands[1]);
+			int pos2, p;
+			Owner *target;
+			if (commands.size() == 4) {
+				if (commands[3] == "r") pos2 = -1;
+				else pos2 = stoi(commands[3]);
+				p = stoi(commands[2]);
+				cout << p << " " << pos2;
+				if (p == 1) target = &p1;
+				else target = &p2;
+			}
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				active->move(c, pos, active->get_hand(), active->get_board());
@@ -149,6 +162,47 @@ void Controller::play(istream &in, bool testing) {
 					ritual = c;
 				}
 				if (!testing) active->spend_magic(c->getCost());
+			}
+
+			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
+				Spell *s = dynamic_cast<Spell*>(c);
+			        Ability *a = s->get_ability();
+				if (a->get_targets()[0] == "AllMinion") {
+					if (a->activate(active) && a->activate(non_active)) {
+						active->get_hand().remove(pos);
+						if (!testing) {
+							active->spend_magic(c->getCost());
+						}
+					}	
+				}
+				if (a->getType() == "Move") {
+					if (a->get_targets()[1] == "Graveyard" && a->get_targets()[2] == "Board") {
+						if (a->activate(nullptr, 0, active)) {
+							active->get_hand().remove(pos);
+							if (!testing) {
+								active->spend_magic(c->getCost());
+							}
+						}
+					}
+
+					if (a->get_targets()[1] == "Board" && a->get_targets()[2] == "Hand") {
+						a->activate(target->get_board().find(pos2), pos2, target);
+						active->get_hand().remove(pos);
+						if (!testing) {
+							active->spend_magic(c->getCost());
+						}
+					}
+				}
+				if (a->getType() == "Destroy") {
+					cout << "Destroy" << endl;
+					if (pos2 != -1) {
+						Card *mr = target->get_board().find(pos2);
+						a->activate(mr, pos2, target);
+					} else if (pos2 == -1) {
+						// a->activate
+					}
+
+				}	
 			}
 		} else if (command == "use") {
 			cout << command << endl;

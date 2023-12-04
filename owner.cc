@@ -50,9 +50,9 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Spell") {
 		vector<string> type = split(info[4]);
 		vector<string> targets = split(info[5]);
-		cout << type[0] << endl;
-		cout << targets[0] << endl;
-		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
+		// cout << type[0] << endl;
+		// cout << targets[0] << endl;
+		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3], type, targets});
 	}
 
 	if (info.size() == 6 && info[2] == "Ritual") {
@@ -165,7 +165,7 @@ bool Owner::draw(int i) {
 bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
 	// Move Card from col1 to col2
 	// Card* c = col1.find(i);
-	cout << c->getName() << endl;
+	// cout << c->getName() << endl;
 	// col1.remove(i);
 	if (col2.add(c)) {
 		col1.remove(pos);
@@ -184,6 +184,30 @@ void Owner::add_magic(int i) {
 
 void Owner::spend_magic(int i) {
 	magic -= i;
+}
+
+bool Owner::damage_minion(int pos, int i) {
+	Card *m = board.find(pos);
+	if (m->take_damage(i) <= 0) {
+		move(m, pos, board, graveyard);
+		return true;
+	} else return false;
+}
+
+void Owner::damage_all_minions(int i) {
+	for (int pos = 0; pos < board.numCards(); pos++) {
+		if (damage_minion(pos, i)) pos--;
+	}
+}
+
+bool Owner::resurrect() {
+	int pos = graveyard.numCards() - 1;
+	if (pos == -1) return false;
+	Card *m = graveyard.find(pos);
+	if (move(m, pos, graveyard, board)) {
+		m->take_damage(-1 * (1 - m->getDefense()));
+		return true;
+	} else return false;
 }
 
 Hand &Owner::get_hand() { return hand; }
