@@ -8,7 +8,7 @@
 Board::Board() : Collection{}, ritual{nullptr} {}
 
 bool Board::add(Card *c) {
-	if (c->getType() != "Minion" || Cards.size() >= 5) return false;
+	if (c->getType() != "Minion" || c->getType() != "Minion" && Cards.size() >= 5) return false;
 	this->Cards.emplace_back(c);
 	//cout << c->display() << endl;
 	return true;

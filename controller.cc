@@ -110,6 +110,7 @@ void Controller::play(istream &in, bool testing) {
 			int pos1, pos2;
 			pos1 = stoi(commands[1]);
 			Card *m1 = active->get_board().find(pos1);
+			
 			if (m1->get_actions() > 0 || testing) {
 				if (commands.size() == 3) {
 					pos2 = stoi(commands[2]);

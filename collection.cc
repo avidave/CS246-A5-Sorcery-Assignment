@@ -23,6 +23,7 @@ Collection::~Collection() {
 // }
 
 bool Collection::remove(int i) {
+	if (i > Cards.size() || i < 0) return false;
 	Cards.erase(Cards.begin() + i);
 	return true;
 }
