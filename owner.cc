@@ -131,7 +131,7 @@ bool Owner::draw(int i) {
 		if (deck.numCards() <= 0) return false;
 		if (hand.add(deck.find(deck.numCards() - 1))) {
 			deck.pop_back();
-			hand.find(hand.numCards() - 1)->toggleActive();
+			// hand.find(hand.numCards() - 1)->toggleActive();
 		} else {
 			return false;
 		}
@@ -145,10 +145,10 @@ bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
 	// Card* c = col1.find(i);
 	// cout << c->getName() << endl;
 	// col1.remove(i);
-	cout << "AHAH" << endl;
+	//cout << "AHAH" << endl;
 	if (col2.add(c)) {
 		col1.remove(pos);
-		cout << "HAHA" << endl;
+		//cout << "HAHA" << endl;
 		return true;
 	}
 	else {
