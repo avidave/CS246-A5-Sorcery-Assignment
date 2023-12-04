@@ -3,3 +3,5 @@ Minion
 1
 3
 At the end of your turn, all your minins gain +0/+1.
+Trigger
+3

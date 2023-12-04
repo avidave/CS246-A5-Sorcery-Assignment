@@ -3,3 +3,5 @@ Ritual
 At the start of your turn, gain 1 magic
 1
 5
+Trigger
+0

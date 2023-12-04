@@ -5,13 +5,18 @@
 #include <string>
 #include <memory>
 #include "collection.h"
+#include "ritual.h"
 #include "card.h"
 
 using namespace std;
 
 class Board : public Collection {
+	Card *ritual;
+
 	public:
 		Board();
+		Card *get_ritual();
+		void set_ritual(Card *r);
 		bool add(Card *c) override;
 		void reset_minion_actions();
 		vector<card_template_t> display() override;

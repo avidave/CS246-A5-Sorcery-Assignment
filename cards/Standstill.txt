@@ -3,3 +3,5 @@ Ritual
 Whenever a minion enters play, destroy it
 2
 4
+Trigger
+1

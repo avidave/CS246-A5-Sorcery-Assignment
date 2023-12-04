@@ -6,6 +6,7 @@
 using namespace std;
 
 class Subject {
+
 	vector<Observer*> observers;
 
 	public:

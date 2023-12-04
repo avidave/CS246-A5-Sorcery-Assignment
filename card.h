@@ -14,13 +14,17 @@ class Card : public Observer {
 		string ability_txt;
 		int ability_cost;
 		int actions;
+		bool active = false;
+		vector<string> triggers;
 	public:
-		Card(string name, int cost);
-		Card(string name, int cost, int attack, int defense);
-		Card(string name, int cost, string ability_txt);
-		Card(string name, int cost, string ability_txt, int ability_cost);
-		Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost);
-		Card(string name, int cost, string ability_txt, int ability_cost, int actions);
+		explicit Card(string name, int cost);
+		explicit Card(string name, int cost, int attack, int defense);
+		explicit Card(string name, int cost, string ability_txt);
+		explicit Card(string name, int cost, string ability_txt, int ability_cost);
+		explicit Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost);
+		explicit Card(string name, int cost, string ability_txt, int ability_cost, int actions);
+		explicit Card(string name, int cost, string ability_txt, int ability_cost, int actions, vector<string> triggers);
+		explicit Card(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers);
 
 		string getName();
 		int getCost();
@@ -37,6 +41,8 @@ class Card : public Observer {
 		void notify() override;
 		void notify(int n) override;
 		virtual card_template_t display() = 0;
+		vector<string> &getTriggers();
+		void toggleActive();
 		//virtual bool activate();
 		//virtual void setActions(int a);
 };

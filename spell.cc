@@ -23,6 +23,8 @@ Spell::Spell(string name, int cost, string ability_txt, vector<string> ability_t
 		ability = make_unique<Move>(Move{targets});
 	} else if (ability_type[0] == "Destroy") {
 		ability = make_unique<Destroy>(Destroy{targets});
+	} else if (ability_type[0] == "Charge") {
+		ability = make_unique<Charge>(Charge{targets, stoi(ability_type[1])});
 	}
 }
 string Spell::getType() { return "Spell"; }

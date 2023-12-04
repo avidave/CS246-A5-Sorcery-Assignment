@@ -44,11 +44,9 @@ void Controller::start() {
 	//cout << endl << endl << endl;
 	// p2.display_deck();
 
-	for (int i = 0; i < 4; ++i) {
-		p1.setTrigger(triggers.at(i));
-		p2.setTrigger(triggers.at(i));
-		triggers.at(i).notifyObservers();
-	}
+	p1.setTrigger(triggers);
+	p2.setTrigger(triggers);
+	//for (Trigger t : triggers) t.notifyObservers();
 
 	p1.draw(5);
 	p2.draw(5);
@@ -87,6 +85,7 @@ void Controller::play(istream &in, bool testing) {
 			cout << "\t  board -- Describe all cards on the board." << endl;
 		} else if (command == "end") {
 			// cout << command << endl;
+			triggers[3].notifyObservers();
 			flip_active();
 			turn();
 		} else if (command == "quit") {
@@ -102,11 +101,13 @@ void Controller::play(istream &in, bool testing) {
 			if (testing) {
 				int pos = stoi(commands[1]);
 				Card *c = active->get_hand().find(pos);
-				if (c->getType() == "Minion") {
-					active->move(c, pos, active->get_hand(), active->get_graveyard());
-				} else {
-					active->get_hand().remove(pos);
-				}
+				// if (c->getType() == "Minion") {
+				// 	active->move(c, pos, active->get_hand(), active->get_graveyard());
+				// } else {
+				// 	active->get_hand().remove(pos);
+				// }
+				c->toggleActive();
+				active->get_hand().remove(pos);
 			}
 		} else if (command == "attack") {
 			// cout << command << endl;
@@ -123,8 +124,16 @@ void Controller::play(istream &in, bool testing) {
 					//m2->take_damage(m1->getStrength());
 					//m1->take_damage(m2->getStrength());
 
-					//if (m1->getDefense() <= 0) active->move(m1, pos1, active->get_board(), active->get_graveyard());
-					//if (m2->getDefense() <= 0) non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
+					if (m1->getDefense() <= 0) {
+						triggers[2].notifyObservers();
+						m1->toggleActive();
+						active->move(m1, pos1, active->get_board(), active->get_graveyard());
+					}
+					if (m2->getDefense() <= 0) {
+						triggers[2].notifyObservers();
+						m2->toggleActive();
+						non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
+					}
 				
 
 				} else if (commands.size() == 2) {
@@ -150,17 +159,14 @@ void Controller::play(istream &in, bool testing) {
 			}
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
-				active->move(c, pos, active->get_hand(), active->get_board());
+				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
 				if (!testing) active->spend_magic(c->getCost());
+				if (moved) triggers[1].notifyObservers();
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
-				cout << c->getName() << endl;
-				// col1.remove(i);
-				active->move(c, pos, active->get_hand(), active->get_board());
-				Card *ritual = active->get_ritual();
-				if (ritual->getName() == "unknown") {
-					ritual = c;
-				}
+				
+				active->get_board().set_ritual(c);
+				active->get_hand().remove(pos);
 				if (!testing) active->spend_magic(c->getCost());
 			}
 
@@ -197,11 +203,26 @@ void Controller::play(istream &in, bool testing) {
 					cout << "Destroy" << endl;
 					if (pos2 != -1) {
 						Card *mr = target->get_board().find(pos2);
-						a->activate(mr, pos2, target);
+						if (a->activate(mr, pos2, target)) {
+							active->get_hand().remove(pos);
+							if (!testing) active->spend_magic(c->getCost());
+						}
 					} else if (pos2 == -1) {
-						// a->activate
+						Card *r = target->get_board().get_ritual();
+						if (a->activate(r, pos2, target)) {
+							active->get_hand().remove(pos);
+							if (!testing) active->spend_magic(c->getCost());
+						}
 					}
 
+				}
+				if (a->getType() == "Charge") {
+					Card *rtc = active->get_board().get_ritual();
+					Ritual *r = dynamic_cast<Ritual*>(rtc);
+					if (a->activate(r)) {
+						active->get_hand().remove(pos);
+						if (!testing) active->spend_magic(c->getCost());
+					}
 				}	
 			}
 		} else if (command == "use") {
@@ -232,6 +253,7 @@ void Controller::play(istream &in, bool testing) {
 }
 
 void Controller::turn() {
+	triggers[0].notifyObservers();
 	active->add_magic(1);
 	active->draw(1);
 	active->reset_minion_actions();

@@ -51,17 +51,17 @@ void View::board() {
         p2Dead = CARD_TEMPLATE_BORDER;
     }
 
-    Card *ritual_1 = p1->get_ritual();
-    Card *ritual_2 = p2->get_ritual();
+    Card *ritual_1 = deck1.get_ritual();
+    Card *ritual_2 = deck2.get_ritual();
 
     card_template_t p1Ritual;
     card_template_t p2Ritual;
     if (!ritual_1) p1Ritual = CARD_TEMPLATE_BORDER;
-    else if (ritual_1->getName() != "unknown")  p1Ritual = ritual_1->display();
-    else p1Ritual = CARD_TEMPLATE_BORDER;
+    else p1Ritual = ritual_1->display();
+    //else p1Ritual = CARD_TEMPLATE_BORDER;
     if (!ritual_2) p2Ritual = CARD_TEMPLATE_BORDER;
-    else if (ritual_2->getName() != "unknown")  p2Ritual = ritual_2->display();
-    else p2Ritual = CARD_TEMPLATE_BORDER;
+    else p2Ritual = ritual_2->display();
+    //else p2Ritual = CARD_TEMPLATE_BORDER;
 
     vector<card_template_t> minions1;
     vector<card_template_t> minions2;

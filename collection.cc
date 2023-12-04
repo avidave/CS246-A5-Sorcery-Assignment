@@ -32,7 +32,8 @@ void Collection::pop_back() {
 }
 
 Card* Collection::find(int n) {
-	return Cards[n];
+	if (n < Cards.size()) return Cards[n];
+	else return nullptr;
 }
 
 int Collection::numCards() {

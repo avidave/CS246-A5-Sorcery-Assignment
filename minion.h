@@ -7,10 +7,12 @@
 using namespace std;
 
 class Minion : public Card {
+	
 	public:
 		Minion(string name, int cost, int attack, int defense);
 		Minion(string name, int cost, int attack, int defense, string ability_txt);
 		Minion(string name, int cost, int attack, int defense, string ability_txt, int ability_cost);
+		Minion(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers);
 		int getStrength() override;
 		int getDefense() override;
 		string getType() override;
