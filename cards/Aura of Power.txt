@@ -3,3 +3,5 @@ Ritual
 Whenever a minion enters play under your control, it gains +1/+1
 1
 4
+Trigger
+1

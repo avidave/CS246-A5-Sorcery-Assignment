@@ -5,6 +5,7 @@
 using namespace std;
 
 Ritual::Ritual(string name, int cost, string ability_txt, int ability_cost, int actions) : Card{name, cost, ability_txt, ability_cost, actions} {}
+Ritual::Ritual(string name, int cost, string ability_txt, int ability_cost, int actions, vector<string> triggers) : Card{name, cost, ability_txt, ability_cost, actions, triggers} {}
 
 string Ritual::getType() {
     return "Ritual";

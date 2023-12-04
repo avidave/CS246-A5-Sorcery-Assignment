@@ -3,3 +3,5 @@ Minion
 2
 2
 Whenever an opponent's minion enters play, deal 1 damage to it.
+Trigger
+1

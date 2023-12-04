@@ -7,6 +7,7 @@ using namespace std;
 Minion::Minion(string name, int cost, int attack, int defense) : Card{name, cost, attack, defense} {}
 Minion::Minion(string name, int cost, int attack, int defense, string ability_txt) : Card{name, cost, attack, defense, ability_txt, 0} {}
 Minion::Minion(string name, int cost, int attack, int defense, string ability_txt, int ability_cost) : Card{name, cost, attack, defense, ability_txt, ability_cost} {}
+Minion::Minion(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers) : Card{name, cost, attack, defense, ability_txt, triggers} {}
 
 int Minion::getStrength() { return attack; }
 int Minion::getDefense() { return defense; }

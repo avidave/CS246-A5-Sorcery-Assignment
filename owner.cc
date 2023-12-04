@@ -45,6 +45,12 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		if (info.size() == 5) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4])});
 		else if (info.size() == 6) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5]});
 		else if (info.size() == 7) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], stoi(info[6])});
+		else if (info.size() == 8) {
+			if (info[6] == "Trigger") {
+				vector<string> triggers = split(info[7]);
+				return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], triggers});
+			}
+		}
 		else return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4])});
 	}
 	if (info.size() >= 3 && info[2] == "Spell") {
@@ -55,8 +61,13 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
 	}
 
-	if (info.size() == 6 && info[2] == "Ritual") {
+	if (info.size() >= 3 && info[2] == "Ritual") {
 		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
+		if (info.size() == 8 && info[6] == "Trigger") {
+				vector<string> triggers = split(info[7]);
+				return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5]), triggers});
+		}
+
 		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
 	// return make_unique<Card>(Card{info[0], stoi(info[1])});
@@ -120,6 +131,7 @@ bool Owner::draw(int i) {
 		if (deck.numCards() <= 0) return false;
 		if (hand.add(deck.find(deck.numCards() - 1))) {
 			deck.pop_back();
+			hand.find(hand.numCards() - 1)->toggleActive();
 		} else {
 			return false;
 		}
@@ -133,8 +145,10 @@ bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
 	// Card* c = col1.find(i);
 	cout << c->getName() << endl;
 	// col1.remove(i);
+	cout << "AHAH" << endl;
 	if (col2.add(c)) {
 		col1.remove(pos);
+		cout << "HAHA" << endl;
 		return true;
 	}
 	else {
@@ -176,9 +190,20 @@ vector<card_template_t> Owner::display_graveyard() {
 string Owner::getName() { return name; }
 int Owner::getNum() { return num; }
 
-void Owner::setTrigger(Trigger &t) {
+void Owner::setTrigger(vector<Trigger> &t) {
 	for (int i = 0; i < allCards.size(); ++i) {
 		//t.attach(allCards.at(i).get());
-		allCards[i]->attach(t);
+		//allCards[i]->attach(t);
+		vector<string> triggers = allCards[i]->getTriggers();
+
+		//vector<int> states;
+
+		for (string trig : triggers) {
+			int state = stoi(trig);
+			if (state == t[0].getState()) t[0].attach(allCards[i].get());
+			if (state == t[1].getState()) t[1].attach(allCards[i].get());
+			if (state == t[2].getState()) t[2].attach(allCards[i].get());
+			if (state == t[3].getState()) t[3].attach(allCards[i].get());
+		}
 	}
 }

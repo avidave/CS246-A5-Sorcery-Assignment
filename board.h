@@ -11,8 +11,6 @@
 using namespace std;
 
 class Board : public Collection {
-
-	int nMinions;
 	Card *ritual;
 
 	public:

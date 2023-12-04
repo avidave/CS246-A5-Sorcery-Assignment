@@ -5,11 +5,10 @@
 #include "card.h"
 #include <iostream>
 
-Board::Board() : Collection{}, nMinions{0}, ritual{nullptr} {}
+Board::Board() : Collection{}, ritual{nullptr} {}
 
 bool Board::add(Card *c) {
-	if (c->getType() == "Minion") ++nMinions;
-	if ((nMinions >= 5 && c->getType() != "Minion") || (c->getType() != "Minion" || c->getType() != "Ritual")) return false;
+	if (c->getType() != "Minion" || Cards.size() >= 5) return false;
 	this->Cards.emplace_back(c);
 	//cout << c->display() << endl;
 	return true;
@@ -18,7 +17,11 @@ bool Board::add(Card *c) {
 Card *Board::get_ritual() { return ritual; }
 
 void Board::set_ritual(Card *r) {
-	if (ritual) delete ritual;
+	std::cout << "TO SET" << r;
+	if (ritual) {
+		ritual->toggleActive();
+		//delete ritual;
+	}
 	ritual = r; 
 }
 
