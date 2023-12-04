@@ -42,9 +42,6 @@ void Controller::start() {
 	//p1.display_deck();
 	//cout << endl << endl << endl;
 	// p2.display_deck();
-
-	p1.setTrigger(triggers);
-	p2.setTrigger(triggers);
 	//for (Trigger t : triggers) t.notifyObservers();
 
 	p1.draw(5);
@@ -105,7 +102,7 @@ void Controller::play(istream &in, bool testing) {
 				// } else {
 				// 	active->get_hand().remove(pos);
 				// }
-				c->toggleActive();
+				active->removeTrigger(triggers, c);
 				active->get_hand().remove(pos);
 			}
 		} else if (command == "attack") {
@@ -121,14 +118,14 @@ void Controller::play(istream &in, bool testing) {
 					m2->take_damage(m1->getStrength());
 					m1->take_damage(m2->getStrength());
 
+					if (m1->getDefense() <= 0 || m2->getDefense() <= 0) triggers[2].notifyObservers();
+
 					if (m1->getDefense() <= 0) {
-						triggers[2].notifyObservers();
-						m1->toggleActive();
+						active->removeTrigger(triggers, m1);
 						active->move(m1, pos1, active->get_board(), active->get_graveyard());
 					}
 					if (m2->getDefense() <= 0) {
-						triggers[2].notifyObservers();
-						m2->toggleActive();
+						active->removeTrigger(triggers, m2);
 						non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
 					}
 				
@@ -145,7 +142,8 @@ void Controller::play(istream &in, bool testing) {
 			// cout << command << endl;
 			int pos = stoi(commands[1]);
 			Card *c = active->get_hand().find(pos);
-			c->toggleActive();
+			if (c->getType() == "Ritual" && c) active->setTrigger(triggers, c);
+			if (c->getType() == "Minion") active->setTrigger(triggers, c);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
 				if (!testing) active->spend_magic(c->getCost());

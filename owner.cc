@@ -190,20 +190,26 @@ vector<card_template_t> Owner::display_graveyard() {
 string Owner::getName() { return name; }
 int Owner::getNum() { return num; }
 
-void Owner::setTrigger(vector<Trigger> &t) {
-	for (int i = 0; i < allCards.size(); ++i) {
-		//t.attach(allCards.at(i).get());
-		//allCards[i]->attach(t);
-		vector<string> triggers = allCards[i]->getTriggers();
+void Owner::setTrigger(vector<Trigger> &t, Card *c) {
+	vector<string> triggers = c->getTriggers();
 
-		//vector<int> states;
-
-		for (string trig : triggers) {
+	for (string trig : triggers) {
 			int state = stoi(trig);
-			if (state == t[0].getState()) t[0].attach(allCards[i].get());
-			if (state == t[1].getState()) t[1].attach(allCards[i].get());
-			if (state == t[2].getState()) t[2].attach(allCards[i].get());
-			if (state == t[3].getState()) t[3].attach(allCards[i].get());
-		}
+			if (state == t[0].getState()) t[0].attach(c);
+			if (state == t[1].getState()) t[1].attach(c);
+			if (state == t[2].getState()) t[2].attach(c);
+			if (state == t[3].getState()) t[3].attach(c);
+	}
+}
+
+void Owner::removeTrigger(vector<Trigger> &t, Card *c) {
+	vector<string> triggers = c->getTriggers();
+
+	for (string trig : triggers) {
+			int state = stoi(trig);
+			if (state == t[0].getState()) t[0].detach(c);
+			if (state == t[1].getState()) t[1].detach(c);
+			if (state == t[2].getState()) t[2].detach(c);
+			if (state == t[3].getState()) t[3].detach(c);
 	}
 }

@@ -52,7 +52,8 @@ class Owner {
 		Graveyard &get_graveyard();
 		string getName();
 		int getNum();
-		void setTrigger(vector<Trigger> &t);
+		void setTrigger(vector<Trigger> &t, Card *c);
+		void removeTrigger(vector<Trigger> &t, Card *c);
 };
 
 #endif

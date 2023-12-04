@@ -14,7 +14,6 @@ class Card : public Observer {
 		string ability_txt;
 		int ability_cost;
 		int actions;
-		bool active = false;
 		vector<string> triggers;
 	public:
 		Card(string name, int cost);
@@ -42,7 +41,6 @@ class Card : public Observer {
 		void notify(int n) override;
 		virtual card_template_t display() = 0;
 		vector<string> &getTriggers();
-		void toggleActive();
 		//virtual bool activate();
 		//virtual void setActions(int a);
 };
