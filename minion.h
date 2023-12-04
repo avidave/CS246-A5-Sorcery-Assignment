@@ -15,6 +15,8 @@ class Minion : public Card {
 		Minion(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers);
 		int getStrength() override;
 		int getDefense() override;
+		void add_attack(int i) override;
+		void add_defense(int i) override;
 		string getType() override;
 		card_template_t display() override;
 };

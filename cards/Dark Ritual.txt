@@ -5,3 +5,5 @@ At the start of your turn, gain 1 magic
 5
 Trigger
 0
+Magic 1
+Player

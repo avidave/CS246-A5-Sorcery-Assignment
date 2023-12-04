@@ -1,8 +1,6 @@
 #include <vector>
 #include <string>
 #include "ability.h"
-#include "collection.h"
-#include "ritual.h"
 
 
 Ability::Ability(vector<string> targets) : targets{targets} {}
@@ -11,7 +9,7 @@ vector<string> Ability::get_targets() { return targets; }
 bool Ability::activate(Owner &p, int pos) { return false; }
 bool Ability::activate(Owner *p) { return false; }
 bool Ability::activate(Card *c, int pos, Owner *p) { return false; }
-bool Ability::activate(Ritual *r) { return false; }
+bool Ability::activate(Card *c) { return false; }
 
 Damage::Damage(vector<string> targets, int damage) : Ability{targets}, damage{damage} {}
 string Damage::getType() { return "Damage"; }
@@ -69,11 +67,22 @@ bool Destroy::activate(Card *c, int pos, Owner *p) {
 
 Charge::Charge(vector<string> targets, int num) : Ability{targets}, num{num} {}
 string Charge::getType() { return "Charge"; }
-bool Charge::activate(Ritual *r) {
-	if (r) {
-		r->set_actions(r->get_actions() + num);
+bool Charge::activate(Card *c) {
+	if (c) {
+		c->set_actions(c->get_actions() + num);
 		return true;
 	}
 
+	return false;
+}
+
+Add::Add(vector<string> targets, int atk, int def) : Ability{targets}, atk{atk}, def{def} {}
+string Add::getType() { return "Add"; }
+bool Add::activate(Card *c) {
+	if (c->getType() == "Minion") {
+		c->add_attack(atk);
+		c->add_defense(def);
+		return true;
+	}
 	return false;
 }

@@ -18,6 +18,10 @@ void Subject::detach(Observer *o) {
 	}
 }
 
+vector<Observer*> Subject::getObservers() {
+	return observers;
+}
+
 void Subject::notifyObservers() {
 	for (auto ob : observers) ob->notify();
 }

@@ -5,7 +5,6 @@
 #include <string>
 #include <memory>
 #include "collection.h"
-#include "ritual.h"
 #include "card.h"
 
 using namespace std;

@@ -4,6 +4,7 @@
 #include "owner.h"
 #include "deck.h"
 #include "spell.h"
+#include "ritual.h"
 
 using namespace std;
 
@@ -161,14 +162,38 @@ void Controller::play(istream &in, bool testing) {
 			c->toggleActive();
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
-				if (!testing) active->spend_magic(c->getCost());
-				if (moved) triggers[1].notifyObservers();
+				active->spend_magic(c->getCost());
+				if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
+				if (moved) {
+					triggers[1].notifyObservers();
+					vector<Observer*> ob = triggers[1].getObservers();
+					for (int i = 0; i < ob.size(); i++) {
+						Card *obc = dynamic_cast<Card*>(ob[i]);
+						if (obc->getActive()) {
+							if (obc->getType() == "Ritual") {
+								Ritual *obcr = dynamic_cast<Ritual*>(obc);
+								Ability *ar = obcr->get_ability();
+								if (obcr->getAbilityCost() <= obcr->get_actions()) {	
+									if (ar->getType() == "Destroy") {
+										if (ar->activate(c, active->get_board().numCards() - 1, active)) obcr->use_action(obcr->getAbilityCost());
+									}
+
+									if (ar->getType() == "Add" && obc == active->get_board().get_ritual()) {
+										cout << "Add" << endl;
+										if (ar->activate(c)) obcr->use_action(obcr->getAbilityCost());
+									}
+								}
+							}
+						}
+					}
+
+				}
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
-				cout << c->getName() << endl;
 				active->get_board().set_ritual(c);
 				active->get_hand().remove(pos);
-				if (!testing) active->spend_magic(c->getCost());
+				// if (!testing) active->spend_magic(c->getCost());
+				if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 			}
 
 			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
@@ -177,42 +202,40 @@ void Controller::play(istream &in, bool testing) {
 				if (a->get_targets()[0] == "AllMinion") {
 					if (a->activate(active) && a->activate(non_active)) {
 						active->get_hand().remove(pos);
-						if (!testing) {
-							active->spend_magic(c->getCost());
-						}
+						active->spend_magic(c->getCost());
+						if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 					}	
 				}
 				if (a->getType() == "Move") {
 					if (a->get_targets()[1] == "Graveyard" && a->get_targets()[2] == "Board") {
 						if (a->activate(nullptr, 0, active)) {
 							active->get_hand().remove(pos);
-							if (!testing) {
-								active->spend_magic(c->getCost());
-							}
+							active->spend_magic(c->getCost());
+							if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 						}
 					}
 
 					if (a->get_targets()[1] == "Board" && a->get_targets()[2] == "Hand") {
 						a->activate(target->get_board().find(pos2), pos2, target);
 						active->get_hand().remove(pos);
-						if (!testing) {
-							active->spend_magic(c->getCost());
-						}
+						active->spend_magic(c->getCost());
+						if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 					}
 				}
 				if (a->getType() == "Destroy") {
-					cout << "Destroy" << endl;
 					if (pos2 != -1) {
 						Card *mr = target->get_board().find(pos2);
 						if (a->activate(mr, pos2, target)) {
 							active->get_hand().remove(pos);
-							if (!testing) active->spend_magic(c->getCost());
+							active->spend_magic(c->getCost());
+							if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 						}
 					} else if (pos2 == -1) {
 						Card *r = target->get_board().get_ritual();
 						if (a->activate(r, pos2, target)) {
 							active->get_hand().remove(pos);
-							if (!testing) active->spend_magic(c->getCost());
+							active->spend_magic(c->getCost());
+							if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 						}
 					}
 
@@ -222,7 +245,8 @@ void Controller::play(istream &in, bool testing) {
 					Ritual *r = dynamic_cast<Ritual*>(rtc);
 					if (a->activate(r)) {
 						active->get_hand().remove(pos);
-						if (!testing) active->spend_magic(c->getCost());
+						active->spend_magic(c->getCost());
+						if (active->get_magic() < 0) active->add_magic(-1 * active->get_magic());
 					}
 				}	
 			}

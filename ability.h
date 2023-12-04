@@ -4,9 +4,9 @@
 #include <vector>
 #include <string>
 #include "owner.h"
-#include "card.h"
-#include "collection.h"
-#include "ritual.h"
+// #include "card.h"
+// #include "collection.h"
+// #include "ritual.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ class Ability {
 		virtual bool activate(Owner &p, int pos);
 		virtual bool activate(Owner *p);
 		virtual bool activate(Card *c, int pos, Owner *p);
-		virtual bool activate(Ritual *r);
+		virtual bool activate(Card *c);
 		//virtual void activate(Card &c, Owner &p) = 0;
 		//virtual void activate(Owner &p1, Owner &p2) = 0;
 
@@ -64,7 +64,15 @@ class Charge : public Ability {
 	public:
 		Charge(vector<string> targets, int num);
 		string getType() override;
-		bool activate(Ritual *r) override;
+		bool activate(Card *c) override;
+};
+
+class Add : public Ability {
+	int atk, def;
+	public:
+		Add(vector<string> targets, int ark, int def);
+		string getType() override;
+		bool activate(Card *c) override;
 };
 
 #endif

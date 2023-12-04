@@ -48,6 +48,7 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		else if (info.size() == 8) {
 			if (info[6] == "Trigger") {
 				vector<string> triggers = split(info[7]);
+				cout << info[3] << info[4] << endl;
 				return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], triggers});
 			}
 		}
@@ -63,9 +64,14 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 
 	if (info.size() >= 3 && info[2] == "Ritual") {
 		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
-		if (info.size() == 8 && info[6] == "Trigger") {
+		//for (int i = 0; i < info.size(); i++) {
+		//	cout << info[1] << endl;
+		//`}
+		if (info.size() == 10 && info[6] == "Trigger") {
 				vector<string> triggers = split(info[7]);
-				return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5]), triggers});
+				vector<string> type = split(info[8]);
+				vector<string> targets = split(info[9]);
+				return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5]), triggers, type, targets});
 		}
 
 		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
