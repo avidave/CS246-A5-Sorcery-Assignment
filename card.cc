@@ -11,7 +11,7 @@ Card::Card(string name, int cost, string ability_txt, int ability_cost) : name{n
 Card::Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{1} {}
 Card::Card(string name, int cost, string ability_txt, int ability_cost, int actions) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{actions} {}
 Card::Card(string name, int cost, string ability_txt, int ability_cost, int actions, vector<string> triggers) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{actions}, triggers{triggers} {}
-Card::Card(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{0}, actions{actions}, triggers{triggers} {};
+Card::Card(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{0}, actions{actions}, triggers{triggers} {};
 
 // string Card::display() {
 // 	return name + " " + to_string(cost) + " " + getType();
@@ -22,8 +22,6 @@ string Card::getName() { return name; }
 int Card::getCost() { return cost; }
 int Card::getStrength() { return attack; }
 int Card::getDefense() { return defense; }
-void Card::add_attack(int i) { return; }
-void Card::add_defense(int i) { return; }
 int Card::take_damage(int d) {
 	defense -= d;
 	return defense;
@@ -33,8 +31,8 @@ void Card::set_actions(int a) {
 	actions = a;
 }
 
-void Card::use_action(int i) {
-	actions -= i;
+void Card::use_action() {
+	actions--;
 }
 
 int Card::get_actions() { return actions; }
@@ -47,8 +45,6 @@ void Card::attach(Trigger &t) {
 void Card::notify() {
 	if (active) cout << getName() << " " << "Triggered" << endl;
 }
-
-bool Card::getActive() { return active; }
 
 void Card::toggleActive() { active = !active; }
 

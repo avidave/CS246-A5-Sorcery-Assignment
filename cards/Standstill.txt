@@ -5,5 +5,3 @@ Whenever a minion enters play, destroy it
 4
 Trigger
 1
-Destroy
-Minion

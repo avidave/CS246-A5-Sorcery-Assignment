@@ -11,8 +11,6 @@ Minion::Minion(string name, int cost, int attack, int defense, string ability_tx
 
 int Minion::getStrength() { return attack; }
 int Minion::getDefense() { return defense; }
-void Minion::add_attack(int i) { attack += i; }
-void Minion::add_defense(int i) { defense += i; }
 string Minion::getType() { return "Minion"; }
 
 card_template_t Minion::display() {

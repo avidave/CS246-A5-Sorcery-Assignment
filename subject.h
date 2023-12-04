@@ -15,7 +15,6 @@ class Subject {
 		void detach(Observer *o);
 		void notifyObservers();
 		void notifyObservers(int n);
-		vector<Observer*> getObservers();
 		virtual ~Subject() = 0;
 };
 

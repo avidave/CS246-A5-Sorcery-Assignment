@@ -1,5 +1,5 @@
 1
 Spell
 Return target minion to its owner's hand
-Move
-Minion Board Hand
+Move Board Hand
+Minion
