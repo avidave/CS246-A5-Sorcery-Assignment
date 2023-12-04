@@ -17,7 +17,7 @@ bool Board::add(Card *c) {
 Card *Board::get_ritual() { return ritual; }
 
 void Board::set_ritual(Card *r) {
-	std::cout << "TO SET" << r;
+	//std::cout << "TO SET" << r;
 	if (ritual) {
 		ritual->toggleActive();
 		//delete ritual;

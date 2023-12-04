@@ -145,13 +145,14 @@ void Controller::play(istream &in, bool testing) {
 			// cout << command << endl;
 			int pos = stoi(commands[1]);
 			Card *c = active->get_hand().find(pos);
+			c->toggleActive();
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
 				if (!testing) active->spend_magic(c->getCost());
 				if (moved) triggers[1].notifyObservers();
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
-				
+				cout << c->getName() << endl;
 				active->get_board().set_ritual(c);
 				active->get_hand().remove(pos);
 				if (!testing) active->spend_magic(c->getCost());
