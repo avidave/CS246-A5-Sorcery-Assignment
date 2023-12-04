@@ -16,8 +16,7 @@ Ritual::Ritual(string name, int cost, string ability_txt, int ability_cost, int 
 }
 Ritual::Ritual(string name, int cost, string ability_txt, int ability_cost, int actions, vector<string> triggers, vector<string> ability_type, vector<string> targets) : Card{name, cost, ability_txt, ability_cost, actions, triggers} {
 	if (ability_type[0] == "Magic") {
-		vector<string> t = {"AllMinion"};
-		ability = make_unique<DamageAll>(DamageAll{t, 0});
+		ability = make_unique<Magic>(Magic{targets, stoi(ability_type[1])});
 	} else if (ability_type[0] == "Add") {
 		ability = make_unique<Add>(Add{targets, stoi(ability_type[1]), stoi(ability_type[2])});
 	} else if (ability_type[0] == "Destroy") {

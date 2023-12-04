@@ -70,9 +70,17 @@ class Charge : public Ability {
 class Add : public Ability {
 	int atk, def;
 	public:
-		Add(vector<string> targets, int ark, int def);
+		Add(vector<string> targets, int atk, int def);
 		string getType() override;
 		bool activate(Card *c) override;
+};
+
+class Magic : public Ability {
+	int num;
+	public:
+		Magic(vector<string> targets, int num);
+		string getType() override;
+		bool activate(Owner *p) override;
 };
 
 #endif

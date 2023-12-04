@@ -107,7 +107,7 @@ void Controller::play(istream &in, bool testing) {
 				// } else {
 				// 	active->get_hand().remove(pos);
 				// }
-				c->toggleActive();
+				// c->toggleActive();
 				active->get_hand().remove(pos);
 			}
 		} else if (command == "attack") {
@@ -154,7 +154,6 @@ void Controller::play(istream &in, bool testing) {
 				if (commands[3] == "r") pos2 = -1;
 				else pos2 = stoi(commands[3]);
 				p = stoi(commands[2]);
-				cout << p << " " << pos2;
 				if (p == 1) target = &p1;
 				else target = &p2;
 			}
@@ -179,7 +178,6 @@ void Controller::play(istream &in, bool testing) {
 									}
 
 									if (ar->getType() == "Add" && obc == active->get_board().get_ritual()) {
-										cout << "Add" << endl;
 										if (ar->activate(c)) obcr->use_action(obcr->getAbilityCost());
 									}
 								}
@@ -258,8 +256,6 @@ void Controller::play(istream &in, bool testing) {
 			cout << command << endl;
 		} else if (command == "hand") {
 			// cout << command << endl;
-			cout << active->get_life() << endl;
-			cout << active->get_magic() << endl;
 			notifyObservers(active->getNum());
 			//active->display_hand();
 		} else if (command == "board") {
@@ -279,6 +275,20 @@ void Controller::play(istream &in, bool testing) {
 
 void Controller::turn() {
 	triggers[0].notifyObservers();
+	vector<Observer*> ob = triggers[0].getObservers();
+	for (int i = 0; i < ob.size(); i++) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getActive()) {
+			if (obc->getType() == "Ritual") {
+				Ritual *obcr = dynamic_cast<Ritual*>(obc);
+				Ability *ar = obcr->get_ability();
+				if (ar->getType() == "Magic" && obc == active->get_board().get_ritual()) {
+					if (ar->activate(active)) obcr->use_action(obcr->getAbilityCost());
+				}
+			}
+		}
+	}
+
 	active->add_magic(1);
 	active->draw(1);
 	active->reset_minion_actions();

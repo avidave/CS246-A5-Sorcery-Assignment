@@ -86,3 +86,10 @@ bool Add::activate(Card *c) {
 	}
 	return false;
 }
+
+Magic::Magic(vector<string> targets, int num) : Ability{targets}, num{num} {}
+string Magic::getType() { return "Magic"; }
+bool Magic::activate(Owner *p) {
+	p->add_magic(num);
+	return true;
+}
