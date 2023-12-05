@@ -2,12 +2,14 @@
 #define _MINION_H_
 
 #include "card.h"
+#include "enchantment.h"
 #include <string>
 #include <vector>
 
 using namespace std;
 
 class Minion : public Card {
+	Enchantment *enchantment;
 	vector<string> ability;
 	
 	public:
@@ -20,7 +22,10 @@ class Minion : public Card {
 		int getStrength() override;
 		int getDefense() override;
 		string getType() override;
+		int get_actions() override;
+		int getAbilityCost() override;
 		card_template_t display() override;
+		void setEnchantment(Enchantment *e);
 		vector<string> ability_type();
 };
 

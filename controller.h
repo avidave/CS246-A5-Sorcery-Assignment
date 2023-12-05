@@ -8,6 +8,7 @@
 #include "trigger.h"
 #include "view.h"
 #include "textview.h"
+#include "graphicalview.h"
 
 using namespace std;
 
@@ -18,9 +19,11 @@ class Controller : public Subject {
 	Owner *non_active = &p2;
 	vector<Trigger> triggers;
 	unique_ptr<TextView> tv;
+	unique_ptr<GraphicalView> gv;
+	bool graphics = false;
 
 	public:
-		Controller(Owner p1, Owner p2);
+		Controller(Owner p1, Owner p2, bool graphics);
 		~Controller();
 
 		void echoName(int n);

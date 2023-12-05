@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	Player1.import_deck(deck1);
 	Player2.import_deck(deck2);
 
-	Controller control{move(Player1), move(Player2)};
+	Controller control{move(Player1), move(Player2), graphics};
 	control.start(testing);
 	control.turn();
 	if (isInit) {

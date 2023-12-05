@@ -14,10 +14,10 @@ class View : public Observer {
     public:
         View(Owner *p1, Owner *p2);
         virtual void notify() = 0;
-        virtual void print() = 0;
-        void board();
-        void hand(int p);
-        void inspect(int n);
+        //virtual void print() = 0;
+        string board();
+        string hand(int p);
+        string inspect(int n);
 };
 
 #endif

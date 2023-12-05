@@ -11,13 +11,19 @@
 
 using namespace std;
 
-Controller::Controller(Owner p1, Owner p2) : p1{move(p1)}, p2{move(p2)} {
+Controller::Controller(Owner p1, Owner p2, bool graphics) : p1{move(p1)}, p2{move(p2)}, graphics{graphics} {
 
 	for (int i = 0; i < 4; ++i) {
 		triggers.emplace_back(Trigger{i});
 	}
 
 	tv = make_unique<TextView>(TextView{&this->p1, &this->p2});
+
+	if (graphics) {
+		gv = make_unique<GraphicalView>(GraphicalView{&this->p1, &this->p2});
+
+		attach(gv.get());
+	}
 
 	attach(tv.get());
 }
@@ -156,6 +162,7 @@ void minion_enter_minion(vector<Trigger> t, Card *c, Owner *p, Owner *active, Ow
 void Controller::play(istream &in, bool testing) {
 	string line;
 	while (getline(in, line)) {
+		gv->inspect(active->getNum());
 		vector<string> commands;
 		string temp = "";
 		for (int i = 0; i < line.length(); ++i) {
@@ -190,6 +197,7 @@ void Controller::play(istream &in, bool testing) {
 			end_turn_minion(triggers[3], active, active);
 			end_turn_minion(triggers[3], non_active, active);
 			flip_active();
+			if (graphics) gv->notify(active->getNum());
 			turn();
 		} else if (command == "quit") {
 			//cout << command << endl;
@@ -198,6 +206,7 @@ void Controller::play(istream &in, bool testing) {
 			if (testing) {
 				// cout << command << endl;
 				active->draw(1);
+				if (graphics) gv->notify(active->getNum());
 			}
 
 		} else if (command == "discard") {
@@ -211,6 +220,7 @@ void Controller::play(istream &in, bool testing) {
 				// }
 				active->removeTrigger(triggers, c);
 				active->get_hand().remove(pos);
+				if (graphics) gv->notify(active->getNum());
 			}
 		} else if (command == "attack") {
 			// cout << command << endl;
@@ -254,6 +264,10 @@ void Controller::play(istream &in, bool testing) {
 				}
 
 				m1->use_action();
+				if (graphics) {
+					gv->notify(active->getNum());
+					gv->notify();
+				}
 			}
 		} else if (command == "play") {
 			// cout << command << endl;
@@ -299,6 +313,18 @@ void Controller::play(istream &in, bool testing) {
 				active->spend_magic(c->getCost());
 				active->setTrigger(triggers, c);
 				if (testing && active->get_magic() < 0) active->set_magic(0);
+			}
+
+			if (c->getType() == "Enchantment" && (c->getCost() <= active->get_magic() || testing)) {
+				Minion *m = nullptr;
+				if (active->getNum() == target_int && active->get_board().find(pos2)->getType() == "Minion") m = dynamic_cast<Minion *>(active->get_board().find(pos2));
+				else if (active->get_board().find(pos2)->getType() == "Minion") m = dynamic_cast<Minion *>(non_active->get_board().find(pos2));
+
+				if (m) {
+					m->setEnchantment(dynamic_cast<Enchantment *>(c));
+					active->get_hand().remove(pos);
+					if (!testing) active->spend_magic(c->getCost());
+				}
 			}
 
 			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
@@ -407,6 +433,11 @@ void Controller::play(istream &in, bool testing) {
 					}
 				}
 			}
+
+			if (graphics) {
+				gv->notify(active->getNum());
+				gv->notify();
+			}
 		} else if (command == "use") {
 			// cout << command << endl;
 			int pos = stoi(commands[1]);
@@ -477,10 +508,10 @@ void Controller::play(istream &in, bool testing) {
 						if (testing && active->get_magic() < 0) active->set_magic(0);
 					}
 				}
+
+				if (graphics) gv->notify();
 			}
 		} else if (command == "inspect") {
-			cout << command << endl;
-		} else if (command == "describe") {
 			cout << command << endl;
 		} else if (command == "hand") {
 			// cout << command << endl;
@@ -493,8 +524,6 @@ void Controller::play(istream &in, bool testing) {
 			notifyObservers();
 			//active->display_board();
 			//notifyObservers();
-		} else if (command == "graveyard") {
-			active->display_graveyard();
 		}	
 		else {
 			continue;

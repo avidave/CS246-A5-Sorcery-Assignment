@@ -86,6 +86,15 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 
 		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
 	}
+	if (info.size() >= 3 && info[2] == "Enchantment") {
+		if (info.size() == 4) return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), info[3]});
+		if (info.size() == 6) {
+			if (info[3] == "Multiply") return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), stoi(info[4]), stoi(info[5]), info[3]});
+			if (info[3] == "Add") return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), stoi(info[4]), stoi(info[5]), info[3]});
+			if (info[4] == "AbilityCost") return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), info[3], stoi(info[5]), info[4]});
+			if (info[4] == "Action") return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), info[3], stoi(info[5]), info[4]});
+		}
+	}
 	// return make_unique<Card>(Card{info[0], stoi(info[1])});
 	return make_unique<Spell>(Spell{info[0], stoi(info[1])});
 	

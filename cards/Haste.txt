@@ -1,3 +1,5 @@
 1
 Enchantment
 Enchanted minion gains +1 action each turn
+Action
+1

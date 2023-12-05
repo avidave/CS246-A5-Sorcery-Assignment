@@ -5,7 +5,7 @@ using namespace std;
 
 View::View(Owner *p1, Owner *p2) : p1{p1}, p2{p2} {}
 
-void View::hand(int p) {
+string View::hand(int p) {
     vector<card_template_t> cards;
     if (p == 1) cards = p1->display_hand();
     else cards = p2->display_hand();
@@ -22,10 +22,12 @@ void View::hand(int p) {
         s += "\n";
     }
 
-    cout << s;
+    return s;
 }
 
-void View::board() {
+string View::inspect(int p) { return ""; }
+
+string View::board() {
     auto deck1 = p1->get_board();
     auto deck2 = p2->get_board();
     //cout << deck1.numCards() << endl;
@@ -173,5 +175,5 @@ void View::board() {
     for (int i = 0; i < 165; ++i) s += EXTERNAL_BORDER_CHAR_LEFT_RIGHT;
     s += EXTERNAL_BORDER_CHAR_BOTTOM_RIGHT + "\n";
 
-    cout << s;
+    return s;
 }

@@ -19,6 +19,7 @@ class Card : public Observer {
 		Card(string name, int cost);
 		Card(string name, int cost, int attack, int defense);
 		Card(string name, int cost, string ability_txt);
+		Card(string name, int cost, int attack, int defense, string ability_txt);
 		Card(string name, int cost, string ability_txt, int ability_cost);
 		Card(string name, int cost, int attack, int defense, string ability_txt, int ability_cost);
 		Card(string name, int cost, string ability_txt, int ability_cost, int actions);
@@ -28,13 +29,13 @@ class Card : public Observer {
 		string getName();
 		int getCost();
 		string getAbility();
-		int getAbilityCost();
+		virtual int getAbilityCost();
 		void attach(Trigger &t);
 		virtual int getStrength();
 		virtual int getDefense();
 		void add_attack(int i);
 		void add_defense(int i);
-		int get_actions();
+		virtual int get_actions();
 		int take_damage(int d);
 		void set_actions(int a);
 		void use_action();
