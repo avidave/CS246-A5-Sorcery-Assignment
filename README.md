@@ -1,1 +1,0 @@
-# CS246-A5-Sorcery-Assignment
