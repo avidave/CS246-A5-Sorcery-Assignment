@@ -167,12 +167,15 @@ void Controller::play(istream &in, bool testing) {
 		if (commands.size() > 0) command = commands[0];
 		else continue;
 
-		// if (commands.size() > 1) {
-		// 	commands[1] = to_string(stoi(commands[1]) - 1);
-		// 	if (commands.size() > 2 && commands[3] != "r") {
-		// 		commands[3] = to_string(stoi(commands[3]) - 1);
-		// 	}
-		// }
+		if (commands.size() > 1) {
+			commands[1] = to_string(stoi(commands[1]) - 1);
+			cout << commands[1] << endl;
+		}
+
+		if (commands.size() > 3 && commands[3] != "r") {
+			commands[3] = to_string(stoi(commands[3]) - 1);
+			cout << commands[3] << endl;
+		}
 
 		if (command == "help") {
 			cout << "Commands: ";
@@ -272,6 +275,7 @@ void Controller::play(istream &in, bool testing) {
 				else if (target_int == 2) target = &p2;
 				else target_int = -1;
 			}
+			
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
