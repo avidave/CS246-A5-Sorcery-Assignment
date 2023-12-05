@@ -5,6 +5,7 @@ class Observer {
 	public:
 		virtual void notify() = 0;
 		virtual void notify(int n) = 0;
+		virtual void notify(int p, int n) = 0;
 		virtual ~Observer();
 };
 

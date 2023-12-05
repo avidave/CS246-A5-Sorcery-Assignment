@@ -42,6 +42,7 @@ class Card : public Observer {
 		virtual string getType() = 0;
 		void notify() override;
 		void notify(int n) override;
+		void notify(int p, int n) override;
 		virtual card_template_t display() = 0;
 		vector<string> &getTriggers();
 		//virtual bool activate();

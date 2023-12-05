@@ -161,8 +161,8 @@ void minion_enter_minion(vector<Trigger> t, Card *c, Owner *p, Owner *active, Ow
 
 void Controller::play(istream &in, bool testing) {
 	string line;
+	if (graphics) gv->notify(p1.getNum());
 	while (getline(in, line)) {
-		gv->inspect(active->getNum());
 		vector<string> commands;
 		string temp = "";
 		for (int i = 0; i < line.length(); ++i) {
@@ -336,7 +336,12 @@ void Controller::play(istream &in, bool testing) {
 					else target_c = target->get_board().get_ritual();
 					// s->activate(target, target_c, pos, 0);
 					if (target_c) {
-						if (target->move(target_c, pos2, target->get_board(), target->get_graveyard())) {
+						if (s->ability_type()[1] == "Enchantment") {
+							//cout << "THIS RUNNING?" << endl;
+							dynamic_cast<Minion *>(target_c)->removeEnchantment();
+							active->spend_magic(c->getCost());
+							if (testing && active->get_magic() < 0) active->set_magic(0);
+						} else if (target->move(target_c, pos2, target->get_board(), target->get_graveyard())) {
 							target->removeTrigger(triggers, target_c);
 							triggers[2].notifyObservers();
 							minion_leave_minion(triggers[2], active);
@@ -513,6 +518,10 @@ void Controller::play(istream &in, bool testing) {
 			}
 		} else if (command == "inspect") {
 			cout << command << endl;
+			int player = stoi(commands[1]);
+			int pos  = stoi(commands[1]);
+			//if ()
+			notifyObservers(player, pos);
 		} else if (command == "hand") {
 			// cout << command << endl;
 			cout << active->get_life() << endl;

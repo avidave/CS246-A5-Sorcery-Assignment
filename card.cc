@@ -59,4 +59,8 @@ void Card::notify(int n) {
 	// This function should only have code for view, not card.
 }
 
+void Card::notify(int p, int n) {
+	// This function should only have code for view, not card.
+}
+
 vector<string> &Card::getTriggers() { return triggers; }

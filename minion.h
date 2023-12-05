@@ -26,7 +26,9 @@ class Minion : public Card {
 		int getAbilityCost() override;
 		card_template_t display() override;
 		void setEnchantment(Enchantment *e);
+		Enchantment *getEnchantment();
 		vector<string> ability_type();
+		bool removeEnchantment();
 };
 
 #endif

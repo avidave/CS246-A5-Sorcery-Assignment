@@ -73,6 +73,9 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Spell") {
 		vector<string> type = split(info[4]);
 		vector<string> targets = split(info[5]);
+		if (targets.size() > 0 && targets[0] == "Enchantment") {
+			type.emplace_back("Enchantment");
+		}
 		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3], type});
 	}
 

@@ -49,13 +49,19 @@ vector<string> Minion::ability_type() {
 }
 
 void Minion::setEnchantment(Enchantment *e) {
-	// if (!e) {
-    //     if (getEnchantment()) {
-    //         //cout << component->getName();
-    //         delete component;
-    //     }
-	// 	else dynamic_cast<Enchantment *>(component)->setEnchantment(e);
-    // }
     if (!enchantment) enchantment = e;
     else enchantment->setEnchantment(e);
+}
+
+Enchantment *Minion::getEnchantment() {
+    if (!enchantment) return nullptr;
+    else return enchantment;
+}
+
+bool Minion::removeEnchantment() {
+	if (!enchantment) return false;
+	if (!enchantment->removeEnchantment()) {
+		enchantment = nullptr;
+	}
+	return true;
 }

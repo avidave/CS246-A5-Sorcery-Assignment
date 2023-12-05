@@ -25,7 +25,52 @@ string View::hand(int p) {
     return s;
 }
 
-string View::inspect(int p) { return ""; }
+string View::inspect(int p, int n) {
+
+    Card *m;
+    if (p == p1->getNum() && p1->get_board().find(n)->getType() == "Minion") m = p1->get_board().find(n);
+    else if (p2->get_board().find(n)->getType() == "Minion") m = p2->get_board().find(n);
+
+    card_template_t mCard;
+
+    if (m) card_template_t mCard = m->display();
+    else return "AAAA";
+
+    Enchantment *e = dynamic_cast<Minion *>(m)->getEnchantment();
+    vector<card_template_t> eCards;
+    //eCards.emplace_back(e->display());
+
+    while (e) {
+        eCards.emplace_back(e->display());
+        e = e->getEnchantment();
+    }
+
+    string s;
+    int height = mCard.size();
+
+    for (int i = 0; i < height; ++i) s += mCard.at(i) + "\n";
+
+    int numCards = eCards.size() / 5;
+
+    for (int i = 0; i < numCards; ++i) {
+
+        for (int r = 0; r < height; ++r) {
+            for (int v = 0; v < 5; ++v) s += eCards.at(v + i * 5).at(r);
+            s += "\n";
+        }
+    }
+
+    int remaining = eCards.size() - numCards * 5;
+
+    for (int i = remaining; i < eCards.size(); ++i) {
+        for (int r = 0; r < height; ++r) {
+            for (int v = 0; v < 5; ++v) s += eCards.at(v + i * 5).at(r);
+            s += "\n";
+        }
+    }
+
+    return s;
+}
 
 string View::board() {
     auto deck1 = p1->get_board();

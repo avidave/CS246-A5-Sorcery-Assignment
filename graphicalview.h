@@ -17,7 +17,7 @@ class GraphicalView : public View {
         GraphicalView(Owner *p1, Owner *p2);
         void notify() override;
         void notify(int n) override;
-        //void notify(int p, int n) override;
+        void notify(int p, int n) override;
         //void print();
 };
 

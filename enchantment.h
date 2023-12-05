@@ -11,7 +11,7 @@ using namespace std;
 class Enchantment : public EnchantmentDec {
 	//unique_ptr<Ability> ability;
     bool silence = false;
-    
+
     public:
 	    Enchantment(Card *e, string name, int cost, string ability_txt);
         Enchantment(Card *e, string name, int cost, int attack, int defense, string mod_type);
@@ -37,6 +37,7 @@ class Enchantment : public EnchantmentDec {
 
         void setEnchantment(Card *e);
         Enchantment *getEnchantment();
+        bool removeEnchantment();
 };
 
 #endif

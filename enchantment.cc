@@ -79,8 +79,13 @@ card_template_t Enchantment::display() {
     }
 }
 
-// Ability *Enchantment::get_ability() {
-//     // if (silence) return nullptr;
-//     // return component->get_ability();
-//     return nullptr;
-// }
+bool Enchantment::removeEnchantment() {
+    if (!component) {
+        return false;
+    }
+	if (!dynamic_cast<Enchantment *>(component)->removeEnchantment()) {
+        component = nullptr;
+        return false;
+    }
+	return true;
+}

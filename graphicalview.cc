@@ -56,8 +56,8 @@ void GraphicalView::notify(int n) {
     }
 }
 
-// void GraphicalView::notify(int p, int n) {
-//     cout << inspect(p, n);
-// }
+void GraphicalView::notify(int p, int n) {
+    //cout << inspect(p, n);
+}
 
 //void TextView::print() {}
