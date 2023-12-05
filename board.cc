@@ -27,4 +27,11 @@ void Board::reset_minion_actions() {
 	}
 }
 
+void Board::add_to_all(int atk, int def) {
+	for (int i = 0; i < Cards.size(); ++i) {
+		Cards[i]->add_attack(atk);
+		Cards[i]->add_defense(def);
+	}
+}
+
 vector<card_template_t> Board::display() { return {}; }

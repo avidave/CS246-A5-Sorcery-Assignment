@@ -19,6 +19,7 @@ class Board : public Collection {
 		void set_ritual(Card *r);
 		bool add(Card *c) override;
 		void reset_minion_actions();
+		void add_to_all(int atk, int def);
 		vector<card_template_t> display() override;
 };
 

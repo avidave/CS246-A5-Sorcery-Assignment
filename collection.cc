@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 Collection::~Collection() {
@@ -35,6 +36,11 @@ void Collection::pop_back() {
 Card* Collection::find(int n) {
 	if (n < Cards.size()) return Cards[n];
 	else return nullptr;
+}
+
+bool Collection::find(Card *c) {
+	if (std::find(Cards.begin(), Cards.end(), c) != Cards.end()) return true;
+	else return false;
 }
 
 int Collection::numCards() {

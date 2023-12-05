@@ -19,6 +19,7 @@ class Collection {
 		bool remove(int n);
 		void pop_back();
 		Card* find(int n);
+		bool find(Card *c);
 		int numCards();
 };
 

@@ -5,6 +5,7 @@
 #include "owner.h"
 #include "deck.h"
 #include "spell.h"
+#include "minion.h"
 
 using namespace std;
 
@@ -70,8 +71,40 @@ void start_turn_ritual(Trigger t, Owner *p, Owner *active) {
 		}
 	}
 }
+			
 
-void minion_enter_ritual(vector<Trigger> t, Card *c, Owner *p, Owner *active) {
+void end_turn_minion(Trigger t, Owner *p, Owner *active) {
+	vector<Observer*> ob = t.getObservers();
+	for (int i = 0; i < ob.size(); i++) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getType() == "Minion") {
+			Minion *obcm = dynamic_cast<Minion*>(obc);
+			if (p->get_board().find(obcm)) {
+				if (obcm->ability_type()[0] == "Add" && active->get_board().find(obcm)) {
+					p->get_board().add_to_all(stoi(obcm->ability_type()[1]), stoi(obcm->ability_type()[2]));
+				}
+			}	
+		}
+	}
+}
+
+void minion_leave_minion(Trigger t, Owner *p) {
+	vector<Observer*> ob = t.getObservers();
+	for (int i = 0; i < ob.size(); ++i) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getType() == "Minion") {
+			Minion *obcm = dynamic_cast<Minion*>(obc);
+			if (p->get_board().find(obcm)) {
+				if (obcm->ability_type()[0] == "Add") {
+					obcm->add_attack(stoi(obcm->ability_type()[1]));
+					obcm->add_defense(stoi(obcm->ability_type()[2]));
+				}
+			}
+		}
+	}
+}
+
+void minion_enter_ritual(vector<Trigger> t, Card *c, Owner *p, Owner *active, Owner *non_active) {
 	vector<Observer *> ob = t[1].getObservers();
 	for (int i = 0; i < ob.size(); i++) {
 		Card *obc = dynamic_cast<Card*>(ob[i]);
@@ -82,12 +115,36 @@ void minion_enter_ritual(vector<Trigger> t, Card *c, Owner *p, Owner *active) {
 					active->move(c, active->get_board().numCards() - 1, active->get_board(), active->get_graveyard());
 					active->removeTrigger(t, c);
 					t[2].notifyObservers();
+					minion_leave_minion(t[2], active);
+					minion_leave_minion(t[2], non_active);
 					obcr->set_actions(obcr->get_actions() - obcr->getAbilityCost());
 				}
 				if (obcr->ability_type()[0] == "Add" && obcr == active->get_board().get_ritual() && obcr->get_actions() >= obcr->getAbilityCost()) {
 					c->add_attack(stoi(obcr->ability_type()[1]));
 					c->add_defense(stoi(obcr->ability_type()[2]));
 					obcr->set_actions(obcr->get_actions() - obcr->getAbilityCost());
+				}
+			}
+		}
+	}
+}
+
+void minion_enter_minion(vector<Trigger> t, Card *c, Owner *p, Owner *active, Owner *non_active) {
+	vector<Observer *> ob = t[1].getObservers();
+	for (int i = 0; i < ob.size(); i++) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getType() == "Minion") {
+			Minion *obcm = dynamic_cast<Minion*>(obc);
+			if (p->get_board().find(obcm)) {
+				if (obcm->ability_type()[0] == "Damage" && non_active->get_board().find(obcm)) {
+					c->take_damage(stoi(obcm->ability_type()[1]));
+					if (c->getDefense() <= 0) {
+						active->removeTrigger(t, c);
+						t[2].notifyObservers();
+						minion_leave_minion(t[2], active);
+					        minion_leave_minion(t[2], non_active);	
+						active->move(c, active->get_board().numCards() - 1, active->get_board(), active->get_graveyard());
+					}
 				}
 			}
 		}
@@ -128,6 +185,8 @@ void Controller::play(istream &in, bool testing) {
 		} else if (command == "end") {
 			// cout << command << endl;
 			triggers[3].notifyObservers();
+			end_turn_minion(triggers[3], active, active);
+			end_turn_minion(triggers[3], non_active, active);
 			flip_active();
 			turn();
 		} else if (command == "quit") {
@@ -165,8 +224,16 @@ void Controller::play(istream &in, bool testing) {
 					m2->take_damage(m1->getStrength());
 					m1->take_damage(m2->getStrength());
 
-					if (m1->getDefense() <= 0) triggers[2].notifyObservers();
-					if (m2->getDefense() <= 0) triggers[2].notifyObservers();
+					if (m1->getDefense() <= 0) {
+						triggers[2].notifyObservers();
+						minion_leave_minion(triggers[2], active);
+						minion_leave_minion(triggers[2], non_active);
+					}
+					if (m2->getDefense() <= 0) {
+						triggers[2].notifyObservers();
+						minion_leave_minion(triggers[2], active);
+						minion_leave_minion(triggers[2], non_active);
+					}
 
 					if (m1->getDefense() <= 0) {
 						active->removeTrigger(triggers, m1);
@@ -216,8 +283,10 @@ void Controller::play(istream &in, bool testing) {
 				if (moved) {
 					triggers[1].notifyObservers();
 					active->setTrigger(triggers, c);
-					minion_enter_ritual(triggers, c, active, active);
-					minion_enter_ritual(triggers, c, non_active, active);
+					minion_enter_minion(triggers, c, active, active, non_active);
+					minion_enter_minion(triggers, c, non_active, active, non_active);
+					minion_enter_ritual(triggers, c, active, active, non_active);
+					minion_enter_ritual(triggers, c, non_active, active, non_active);
 					c->set_actions(0);
 				}
 			}
@@ -242,6 +311,8 @@ void Controller::play(istream &in, bool testing) {
 						if (target->move(target_c, pos2, target->get_board(), target->get_graveyard())) {
 							target->removeTrigger(triggers, target_c);
 							triggers[2].notifyObservers();
+							minion_leave_minion(triggers[2], active);
+							minion_leave_minion(triggers[2], non_active);
 							active->spend_magic(c->getCost());
 							active->get_hand().remove(pos);
 							if (testing && active->get_magic() < 0) active->set_magic(0);
@@ -265,6 +336,8 @@ void Controller::play(istream &in, bool testing) {
 						if (m->getDefense() <= 0) {
 							active->removeTrigger(triggers, m);
 							triggers[2].notifyObservers();
+							minion_leave_minion(triggers[2], active);
+							minion_leave_minion(triggers[2], non_active);
 							active->move(m, i, active->get_board(), active->get_graveyard());
 							--i;
 						}
@@ -278,6 +351,8 @@ void Controller::play(istream &in, bool testing) {
 						if (m->getDefense() <= 0) {
 							non_active->removeTrigger(triggers, m);
 							triggers[2].notifyObservers();
+							minion_leave_minion(triggers[2], active);
+							minion_leave_minion(triggers[2], non_active);
 							non_active->move(m, i, non_active->get_board(), non_active->get_graveyard());
 							--i;
 						}
@@ -290,6 +365,8 @@ void Controller::play(istream &in, bool testing) {
 						Card *target_c = target->get_board().find(pos2);
 						target->removeTrigger(triggers, target_c);
 						triggers[2].notifyObservers();
+						minion_leave_minion(triggers[2], active);
+						minion_leave_minion(triggers[2], non_active);
 						active->spend_magic(c->getCost());
 						if (testing && active->get_magic() < 0) active->set_magic(0);
 						if (target->move(target_c, pos2, target->get_board(), target->get_hand())) {
@@ -305,8 +382,10 @@ void Controller::play(istream &in, bool testing) {
 							rm->set_actions(0);
 							triggers[1].notifyObservers();
 							active->setTrigger(triggers, rm);
-							minion_enter_ritual(triggers, rm, active, active);
-							minion_enter_ritual(triggers, rm, non_active, active);
+							minion_enter_minion(triggers, rm, active, active, non_active);
+							minion_enter_minion(triggers, rm, non_active, active, non_active);
+							minion_enter_ritual(triggers, rm, active, active, non_active);
+							minion_enter_ritual(triggers, rm, non_active, active, non_active);
 						} else {
 							active->get_graveyard().remove(p);
 						}

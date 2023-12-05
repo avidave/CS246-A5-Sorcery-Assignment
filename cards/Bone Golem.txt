@@ -5,3 +5,4 @@ Minion
 Gain +1/+1 whenever a minion leaves play.
 Trigger
 2
+Add 1 1
