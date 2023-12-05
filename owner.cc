@@ -38,6 +38,10 @@ void Owner::shuffle_deck() {
 	deck.shuffle();
 }
 
+void Owner::reverse_deck() {
+	deck.reverse();
+}
+
 unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Minion") {
 		// unique_ptr<Card> temp = make_unique<Minion>()
@@ -56,9 +60,7 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Spell") {
 		vector<string> type = split(info[4]);
 		vector<string> targets = split(info[5]);
-		cout << type[0] << endl;
-		cout << targets[0] << endl;
-		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3]});
+		return make_unique<Spell>(Spell{info[0], stoi(info[1]), info[3], type});
 	}
 
 	if (info.size() >= 3 && info[2] == "Ritual") {

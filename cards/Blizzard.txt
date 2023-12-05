@@ -1,5 +1,5 @@
 3
 Spell
 Deal 2 damage to all minions
-Damage 2
+DamageAll 2
 AllMinion

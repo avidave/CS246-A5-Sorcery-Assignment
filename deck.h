@@ -13,6 +13,7 @@ class Deck : public Collection {
 	public:
 		Deck();
 		void shuffle();
+		void reverse();
 		bool add(Card *c) override;
 		vector<card_template_t> display() override;
 };

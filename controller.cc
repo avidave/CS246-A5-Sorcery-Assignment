@@ -1,8 +1,10 @@
 #include <iostream>
+#include <string>
 #include "subject.h"
 #include "controller.h"
 #include "owner.h"
 #include "deck.h"
+#include "spell.h"
 
 using namespace std;
 
@@ -35,9 +37,14 @@ void Controller::trigger(int n) {
 
 Owner* Controller::getActive() { return active; }
 
-void Controller::start() {
-	p1.shuffle_deck();
-	p2.shuffle_deck();
+void Controller::start(bool testing) {
+	if (!testing) {
+		p1.shuffle_deck();
+		p2.shuffle_deck();
+	} else {
+		p1.reverse_deck();
+		p2.reverse_deck();
+	}
 
 	//p1.display_deck();
 	//cout << endl << endl << endl;
@@ -111,7 +118,7 @@ void Controller::play(istream &in, bool testing) {
 			pos1 = stoi(commands[1]);
 			Card *m1 = active->get_board().find(pos1);
 			
-			if (m1->get_actions() > 0 || testing) {
+			if (m1->get_actions() > 0) {
 				if (commands.size() == 3) {
 					pos2 = stoi(commands[2]);
 					Card *m2 = non_active->get_board().find(pos2);
@@ -119,14 +126,15 @@ void Controller::play(istream &in, bool testing) {
 					m2->take_damage(m1->getStrength());
 					m1->take_damage(m2->getStrength());
 
-					if (m1->getDefense() <= 0 || m2->getDefense() <= 0) triggers[2].notifyObservers();
+					if (m1->getDefense() <= 0) triggers[2].notifyObservers();
+					if (m2->getDefense() <= 0) triggers[2].notifyObservers();
 
 					if (m1->getDefense() <= 0) {
 						active->removeTrigger(triggers, m1);
 						active->move(m1, pos1, active->get_board(), active->get_graveyard());
 					}
 					if (m2->getDefense() <= 0) {
-						active->removeTrigger(triggers, m2);
+						non_active->removeTrigger(triggers, m2);
 						non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
 					}
 				
@@ -137,24 +145,132 @@ void Controller::play(istream &in, bool testing) {
 					}
 				}
 
-				if (!testing) m1->use_action();
+				m1->use_action();
 			}
 		} else if (command == "play") {
 			// cout << command << endl;
 			int pos = stoi(commands[1]);
+			int pos2 = -1;
+			int target_int = -1;
+			Owner *target;
+			if (commands.size() > 2) {
+				if (commands[3] == "r") pos2 = 5;
+				else pos2 = stoi(commands[3]);
+				try {
+					target_int = stoi(commands[2]);
+				} catch (...) {
+					target_int = -1;
+				}
+				if (target_int == 1) target = &p1;
+				else if (target_int == 2) target = &p2;
+				else target_int = -1;
+			}
 			Card *c = active->get_hand().find(pos);
-			if (c->getType() == "Ritual" && c) active->setTrigger(triggers, c);
-			if (c->getType() == "Minion") active->setTrigger(triggers, c);
+			// if (c->getType() == "Ritual" && c) active->setTrigger(triggers, c);
+			// if (c->getType() == "Minion") active->setTrigger(triggers, c);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
-				if (!testing) active->spend_magic(c->getCost());
-				if (moved) triggers[1].notifyObservers();
+				if (!testing && moved) active->spend_magic(c->getCost());
+				if (moved) {
+					triggers[1].notifyObservers();
+					active->setTrigger(triggers, c);
+				}
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
 				cout << c->getName() << endl;
 				active->get_board().set_ritual(c);
 				active->get_hand().remove(pos);
 				if (!testing) active->spend_magic(c->getCost());
+				active->setTrigger(triggers, c);
+			}
+
+			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
+				Spell *s = dynamic_cast<Spell*>(c);
+				cout << s->ability_type()[0] << endl;
+				if (s->ability_type()[0] == "Destroy" && target_int != -1 && pos2 != -1) {
+					Card *target_c;
+					if (pos2 != 5) target_c = target->get_board().find(pos2);
+					else target_c = target->get_board().get_ritual();
+					// s->activate(target, target_c, pos, 0);
+					if (target_c) {
+						if (target->move(target_c, pos2, target->get_board(), target->get_graveyard())) {
+							target->removeTrigger(triggers, target_c);
+							triggers[2].notifyObservers();
+							if (!testing) active->spend_magic(c->getCost());
+							active->get_hand().remove(pos);
+						} else if (target_c->getType() == "Ritual") {
+							target->removeTrigger(triggers, target->get_board().get_ritual());
+							target->get_board().set_ritual(nullptr);
+							if (!testing) active->spend_magic(c->getCost());
+							active->get_hand().remove(pos);
+						}
+					}
+				}
+				if (s->ability_type()[0] == "DamageAll") {
+					if (!testing) active->spend_magic(c->getCost());
+					active->get_hand().remove(pos);
+					int i = 0;
+					while (i < active->get_board().numCards()) {
+						Card *m = active->get_board().find(i);
+						m->take_damage(stoi(s->ability_type()[1]));
+						if (m->getDefense() <= 0) {
+							active->removeTrigger(triggers, m);
+							triggers[2].notifyObservers();
+							active->move(m, i, active->get_board(), active->get_graveyard());
+							--i;
+						}
+						++i;
+
+					}
+					i = 0;
+					while (i < non_active->get_board().numCards()) {
+						Card *m = non_active->get_board().find(i);
+						m->take_damage(stoi(s->ability_type()[1]));
+						if (m->getDefense() <= 0) {
+							non_active->removeTrigger(triggers, m);
+							triggers[2].notifyObservers();
+							non_active->move(m, i, non_active->get_board(), non_active->get_graveyard());
+							--i;
+						}
+						++i;
+					}
+				}
+
+				if (s->ability_type()[0] == "Move") {
+					if (s->ability_type()[1] == "Board" && s->ability_type()[2] == "Hand" && target_int != -1 && pos2 >= 0 && pos2 < target->get_board().numCards()) {
+						Card *target_c = target->get_board().find(pos2);
+						target->removeTrigger(triggers, target_c);
+						triggers[2].notifyObservers();
+						if (!testing) active->spend_magic(c->getCost());
+						if (target->move(target_c, pos2, target->get_board(), target->get_hand())) {
+						} else target->get_board().remove(pos2);
+						active->get_hand().remove(pos);
+					}
+
+					if (s->ability_type()[1] == "Graveyard" && s->ability_type()[2] == "Board" && active->get_graveyard().numCards() > 0) {
+						int p = active->get_graveyard().numCards() - 1;
+						Card *rm = active->get_graveyard().find(p);
+						if (active->move(rm, p, active->get_graveyard(), active->get_board())) {
+							rm->take_damage(-1 * (1 - rm->getDefense()));
+							rm->set_actions(1);
+							active->setTrigger(triggers, rm);
+							triggers[1].notifyObservers();
+						} else {
+							active->get_graveyard().remove(p);
+						}
+						if (!testing) active->spend_magic(c->getCost());
+						active->get_hand().remove(pos);
+					}
+				}
+
+				if (s->ability_type()[0] == "Charge") {
+					Card *rit = active->get_board().get_ritual();
+					if (rit) {
+						rit->set_actions(rit->get_actions() + stoi(s->ability_type()[1]));
+						if (!testing) active->spend_magic(c->getCost());
+						active->get_hand().remove(pos);
+					}
+				}
 			}
 		} else if (command == "use") {
 			cout << command << endl;

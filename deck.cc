@@ -20,6 +20,10 @@ void Deck::shuffle() {
 
 }
 
+void Deck::reverse() {
+	std::reverse(Cards.begin(), Cards.end());
+}
+
 vector<card_template_t> Deck::display() { return {}; }
 
 

@@ -33,6 +33,7 @@ class Owner {
 		Owner(Owner&& o) = default;
 		Owner &operator=(Owner &&o) = default;
 		void shuffle_deck();
+		void reverse_deck();
 		unique_ptr<Card> create_card(vector<string> info);
 		void import_deck(string file="default.deck");
 		int get_life();

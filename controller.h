@@ -26,7 +26,7 @@ class Controller : public Subject {
 		void echoName(int n);
 		Owner* getActive();
 
-		void start();
+		void start(bool testing);
 		void turn();
 		void flip_active();
 		void play(istream &in, bool testing);

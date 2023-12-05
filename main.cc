@@ -47,6 +47,8 @@ int main(int argc, char *argv[]) {
 	gameFile >> p1;
 	gameFile >> p2;
 
+	cout << deck2 << endl;
+
 	Owner Player1{p1, 1};
 	Owner Player2{p2, 2};
 
@@ -54,7 +56,7 @@ int main(int argc, char *argv[]) {
 	Player2.import_deck(deck2);
 
 	Controller control{move(Player1), move(Player2)};
-	control.start();
+	control.start(testing);
 	control.turn();
 	if (isInit) {
 		control.play(gameFile, testing);
