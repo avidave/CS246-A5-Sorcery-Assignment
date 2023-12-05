@@ -149,6 +149,7 @@ void minion_enter_minion(vector<Trigger> t, Card *c, Owner *p, Owner *active, Ow
 
 void Controller::play(istream &in, bool testing) {
 	string line;
+	if (p1.get_life() <= 0 || p2.get_life() <= 0) return;
 	if (graphics) gv->notify(p1.getNum());
 	while (getline(in, line)) {
 		vector<string> commands;
@@ -167,14 +168,25 @@ void Controller::play(istream &in, bool testing) {
 		if (commands.size() > 0) command = commands[0];
 		else continue;
 
+		try {
+			if (commands.size() > 1) {
+				stoi(commands[1]);
+			}
+			if (commands.size() > 3 && commands[3] != "r") {
+				stoi(commands[3]);
+			}
+		} catch (...) {
+			continue;
+		}
+
 		if (commands.size() > 1) {
+			if (stoi(commands[1]) > 5 || stoi(commands[1]) < 1) continue;
 			commands[1] = to_string(stoi(commands[1]) - 1);
-			cout << commands[1] << endl;
 		}
 
 		if (commands.size() > 3 && commands[3] != "r") {
+			if (stoi(commands[3]) > 5 || stoi(commands[3]) < 1) continue;
 			commands[3] = to_string(stoi(commands[3]) - 1);
-			cout << commands[3] << endl;
 		}
 
 		if (command == "help") {
@@ -248,6 +260,7 @@ void Controller::play(istream &in, bool testing) {
 
 				} else if (commands.size() == 2) {
 					if (non_active->take_damage(m1->getStrength())) {
+						cout << active->getName() << " Wins" << endl;
 						return;
 					}
 				}

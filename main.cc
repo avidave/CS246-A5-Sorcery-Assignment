@@ -42,8 +42,6 @@ int main(int argc, char *argv[]) {
 	gameFile >> p1;
 	gameFile >> p2;
 
-	cout << deck2 << endl;
-
 	Owner Player1{p1, 1};
 	Owner Player2{p2, 2};
 
@@ -59,6 +57,5 @@ int main(int argc, char *argv[]) {
 	} else {
 		control.play(cin, testing);
 	}
-
-	cout << control.getActive()->getName() << " Wins" << endl;
 }
+
