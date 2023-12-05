@@ -318,7 +318,7 @@ void Controller::play(istream &in, bool testing) {
 			if (c->getType() == "Enchantment" && (c->getCost() <= active->get_magic() || testing)) {
 				Minion *m = nullptr;
 				if (active->getNum() == target_int && active->get_board().find(pos2)->getType() == "Minion") m = dynamic_cast<Minion *>(active->get_board().find(pos2));
-				else if (active->get_board().find(pos2)->getType() == "Minion") m = dynamic_cast<Minion *>(non_active->get_board().find(pos2));
+				else if (non_active->getNum() == target_int && non_active->get_board().find(pos2)->getType() == "Minion") m = dynamic_cast<Minion *>(non_active->get_board().find(pos2));
 
 				if (m) {
 					m->setEnchantment(dynamic_cast<Enchantment *>(c));

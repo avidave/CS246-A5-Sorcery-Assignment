@@ -8,4 +8,4 @@ EnchantmentDec::EnchantmentDec(Card *e, string name, int cost, int attack, int d
 EnchantmentDec::EnchantmentDec(Card *e, string name, int cost, string ability_txt, int ability_cost, int actions) : Card{name, cost, ability_txt, ability_cost, actions}, component{e} {}
 //EnchantmentDec::EnchantmentDec(Minion *m, string name, int cost, string ability_txt, int ability_cost) : Card{name, cost, ability_txt, ability_cost}, component{m} {}
 
-EnchantmentDec::~EnchantmentDec() { delete component; }
+EnchantmentDec::~EnchantmentDec() { }//delete component; }
