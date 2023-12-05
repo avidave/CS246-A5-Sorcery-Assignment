@@ -55,6 +55,45 @@ void Controller::start(bool testing) {
 	p2.draw(5);
 }
 
+void start_turn_ritual(Trigger t, Owner *p, Owner *active) {
+	vector<Observer *> ob = t.getObservers();
+	for (int i = 0; i < ob.size(); i++) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getType() == "Ritual") {
+			Ritual *obcr = dynamic_cast<Ritual*>(obc);
+			if (obcr == p->get_board().get_ritual()) {
+				if (obcr->ability_type()[0] == "Magic" && obcr == active->get_board().get_ritual() && obcr->get_actions() >= obcr->getAbilityCost()) {
+					p->add_magic(stoi(obcr->ability_type()[1]));
+					obcr->set_actions(obcr->get_actions() - obcr->getAbilityCost());
+				}
+			}
+		}
+	}
+}
+
+void minion_enter_ritual(vector<Trigger> t, Card *c, Owner *p, Owner *active) {
+	vector<Observer *> ob = t[1].getObservers();
+	for (int i = 0; i < ob.size(); i++) {
+		Card *obc = dynamic_cast<Card*>(ob[i]);
+		if (obc->getType() == "Ritual") {
+			Ritual *obcr = dynamic_cast<Ritual*>(obc);
+			if (obcr == p->get_board().get_ritual()) {
+				if (obcr->ability_type()[0] == "Destroy" && obcr->get_actions() >= obcr->getAbilityCost()) {
+					active->move(c, active->get_board().numCards() - 1, active->get_board(), active->get_graveyard());
+					active->removeTrigger(t, c);
+					t[2].notifyObservers();
+					obcr->set_actions(obcr->get_actions() - obcr->getAbilityCost());
+				}
+				if (obcr->ability_type()[0] == "Add" && obcr == active->get_board().get_ritual() && obcr->get_actions() >= obcr->getAbilityCost()) {
+					c->add_attack(stoi(obcr->ability_type()[1]));
+					c->add_defense(stoi(obcr->ability_type()[2]));
+					obcr->set_actions(obcr->get_actions() - obcr->getAbilityCost());
+				}
+			}
+		}
+	}
+}
+
 void Controller::play(istream &in, bool testing) {
 	string line;
 	while (getline(in, line)) {
@@ -170,18 +209,25 @@ void Controller::play(istream &in, bool testing) {
 			// if (c->getType() == "Minion") active->setTrigger(triggers, c);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
-				if (!testing && moved) active->spend_magic(c->getCost());
+				if (moved) {
+					active->spend_magic(c->getCost());
+					if (testing && active->get_magic() < 0) active->set_magic(0);
+				}
 				if (moved) {
 					triggers[1].notifyObservers();
 					active->setTrigger(triggers, c);
+					minion_enter_ritual(triggers, c, active, active);
+					minion_enter_ritual(triggers, c, non_active, active);
+					c->set_actions(0);
 				}
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
 				cout << c->getName() << endl;
 				active->get_board().set_ritual(c);
 				active->get_hand().remove(pos);
-				if (!testing) active->spend_magic(c->getCost());
+				active->spend_magic(c->getCost());
 				active->setTrigger(triggers, c);
+				if (testing && active->get_magic() < 0) active->set_magic(0);
 			}
 
 			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
@@ -196,19 +242,22 @@ void Controller::play(istream &in, bool testing) {
 						if (target->move(target_c, pos2, target->get_board(), target->get_graveyard())) {
 							target->removeTrigger(triggers, target_c);
 							triggers[2].notifyObservers();
-							if (!testing) active->spend_magic(c->getCost());
+							active->spend_magic(c->getCost());
 							active->get_hand().remove(pos);
+							if (testing && active->get_magic() < 0) active->set_magic(0);
 						} else if (target_c->getType() == "Ritual") {
 							target->removeTrigger(triggers, target->get_board().get_ritual());
 							target->get_board().set_ritual(nullptr);
-							if (!testing) active->spend_magic(c->getCost());
+							active->spend_magic(c->getCost());
 							active->get_hand().remove(pos);
+							if (testing && active->get_magic() < 0) active->set_magic(0);
 						}
 					}
 				}
 				if (s->ability_type()[0] == "DamageAll") {
-					if (!testing) active->spend_magic(c->getCost());
+					active->spend_magic(c->getCost());
 					active->get_hand().remove(pos);
+					if (testing && active->get_magic() < 0) active->set_magic(0);
 					int i = 0;
 					while (i < active->get_board().numCards()) {
 						Card *m = active->get_board().find(i);
@@ -241,7 +290,8 @@ void Controller::play(istream &in, bool testing) {
 						Card *target_c = target->get_board().find(pos2);
 						target->removeTrigger(triggers, target_c);
 						triggers[2].notifyObservers();
-						if (!testing) active->spend_magic(c->getCost());
+						active->spend_magic(c->getCost());
+						if (testing && active->get_magic() < 0) active->set_magic(0);
 						if (target->move(target_c, pos2, target->get_board(), target->get_hand())) {
 						} else target->get_board().remove(pos2);
 						active->get_hand().remove(pos);
@@ -252,14 +302,17 @@ void Controller::play(istream &in, bool testing) {
 						Card *rm = active->get_graveyard().find(p);
 						if (active->move(rm, p, active->get_graveyard(), active->get_board())) {
 							rm->take_damage(-1 * (1 - rm->getDefense()));
-							rm->set_actions(1);
-							active->setTrigger(triggers, rm);
+							rm->set_actions(0);
 							triggers[1].notifyObservers();
+							active->setTrigger(triggers, rm);
+							minion_enter_ritual(triggers, rm, active, active);
+							minion_enter_ritual(triggers, rm, non_active, active);
 						} else {
 							active->get_graveyard().remove(p);
 						}
-						if (!testing) active->spend_magic(c->getCost());
+						active->spend_magic(c->getCost());
 						active->get_hand().remove(pos);
+						if (testing && active->get_magic() < 0) active->set_magic(0);
 					}
 				}
 
@@ -267,8 +320,9 @@ void Controller::play(istream &in, bool testing) {
 					Card *rit = active->get_board().get_ritual();
 					if (rit) {
 						rit->set_actions(rit->get_actions() + stoi(s->ability_type()[1]));
-						if (!testing) active->spend_magic(c->getCost());
+						active->spend_magic(c->getCost());
 						active->get_hand().remove(pos);
+						if (testing && active->get_magic() < 0) active->set_magic(0);
 					}
 				}
 			}
@@ -304,6 +358,8 @@ void Controller::turn() {
 	active->add_magic(1);
 	active->draw(1);
 	active->reset_minion_actions();
+	start_turn_ritual(triggers[0], active, active);
+	start_turn_ritual(triggers[0], non_active, active);
 	//notifyObservers(active->getNum());
 	//active->display_hand();
 	// notifyObservers(active->getNum());

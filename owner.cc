@@ -65,9 +65,10 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 
 	if (info.size() >= 3 && info[2] == "Ritual") {
 		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
-		if (info.size() == 8 && info[6] == "Trigger") {
+		if (info.size() == 9 && info[6] == "Trigger") {
 				vector<string> triggers = split(info[7]);
-				return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5]), triggers});
+				vector<string> ability = split(info[8]);
+				return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5]), triggers, ability});
 		}
 
 		return make_unique<Ritual>(Ritual{info[0], stoi(info[1]), info[3], stoi(info[4]), stoi(info[5])});
@@ -115,6 +116,7 @@ void Owner::import_deck(string file) {
 }
 
 int Owner::get_magic() { return magic; }
+void Owner::set_magic(int i) { magic = i; }
 int Owner::get_life() { return life; }
 
 bool Owner::take_damage(int i) {

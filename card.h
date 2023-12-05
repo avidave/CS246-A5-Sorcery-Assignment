@@ -32,6 +32,8 @@ class Card : public Observer {
 		void attach(Trigger &t);
 		virtual int getStrength();
 		virtual int getDefense();
+		void add_attack(int i);
+		void add_defense(int i);
 		int get_actions();
 		int take_damage(int d);
 		void set_actions(int a);

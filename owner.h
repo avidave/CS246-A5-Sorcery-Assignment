@@ -38,6 +38,7 @@ class Owner {
 		void import_deck(string file="default.deck");
 		int get_life();
 		int get_magic();
+		void set_magic(int i);
 		void reset_minion_actions();
 		bool take_damage(int i);
 		bool draw(int i);

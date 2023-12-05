@@ -25,3 +25,5 @@ void Subject::notifyObservers() {
 void Subject::notifyObservers(int n) {
 	for (auto ob : observers) ob->notify(n);
 }
+
+vector<Observer*> Subject::getObservers() { return observers; }

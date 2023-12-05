@@ -27,6 +27,14 @@ int Card::take_damage(int d) {
 	return defense;
 }
 
+void Card::add_attack(int i) {
+	attack += i;
+}
+
+void Card::add_defense(int i) {
+	defense += i;
+}
+
 void Card::set_actions(int a) {
 	actions = a;
 }
