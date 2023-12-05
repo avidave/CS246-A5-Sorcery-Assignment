@@ -26,9 +26,7 @@ class Controller : public Subject {
 		Controller(Owner p1, Owner p2, bool graphics);
 		~Controller();
 
-		void echoName(int n);
 		Owner* getActive();
-
 		void start(bool testing);
 		void turn();
 		void flip_active();

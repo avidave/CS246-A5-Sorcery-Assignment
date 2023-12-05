@@ -28,10 +28,7 @@ vector<string> split(string s) {
 }
 
 
-Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {
-	//ritual_slot = make_unique<Card>(Spell{"unknown", 0});
-	//ritual = nullptr; //new Spell{"unknown", 0};
-}
+Owner::Owner(string name, int num): name{name}, num{num}, life{20}, magic{3} {}
 Owner::~Owner() {}
 
 void Owner::shuffle_deck() {
@@ -52,8 +49,6 @@ Card *Owner::get_newly_added() {
 
 unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Minion") {
-		// unique_ptr<Card> temp = make_unique<Minion>()
-		// cout << "Minion" << endl;
 		if (info.size() == 5) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4])});
 		else if (info.size() == 6) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5]});
 		else if (info.size() == 7) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], stoi(info[6])});
@@ -80,7 +75,6 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 	}
 
 	if (info.size() >= 3 && info[2] == "Ritual") {
-		// return make_unique<Ritual>(Ritual{"Majestic Goomba", 1, "I Goomba Can Goomba", 2, 4});
 		if (info.size() == 9 && info[6] == "Trigger") {
 				vector<string> triggers = split(info[7]);
 				vector<string> ability = split(info[8]);
@@ -98,7 +92,6 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 			if (info[4] == "Action") return make_unique<Enchantment>(Enchantment{nullptr, info[0], stoi(info[1]), info[3], stoi(info[5]), info[4]});
 		}
 	}
-	// return make_unique<Card>(Card{info[0], stoi(info[1])});
 	return make_unique<Spell>(Spell{info[0], stoi(info[1])});
 	
 }
@@ -113,7 +106,6 @@ void Owner::import_deck(string file) {
 
 	while (getline(names, n)) {
 
-		//cout << n << endl;
 		ifstream card {"./cards/" + n + ".txt"};
 		string info;
 		vector<string> card_info;
@@ -126,18 +118,9 @@ void Owner::import_deck(string file) {
 		auto c = create_card(card_info);
 		allCards.emplace_back(std::move(c));
 		deck.add(allCards.back().get());
-		card_info.clear();
-
-		//auto c = unique_ptr<Card> {new Card{n, 1}};
-		// unique_ptr<Card> c = make_unique(cd);
-		//allCards.emplace_back(move(c));
-		//deck.add(allCards.back().get());
-		//allCards.emplace_back(move(c));
-		//cout << allCards.back().get()->display();	
+		card_info.clear();	
 		
 	}
-
-	// cout << deck.display();
 }
 
 int Owner::get_magic() { return magic; }
@@ -160,7 +143,6 @@ bool Owner::draw(int i) {
 		if (deck.numCards() <= 0) return false;
 		if (hand.add(deck.find(deck.numCards() - 1))) {
 			deck.pop_back();
-			// hand.find(hand.numCards() - 1)->toggleActive();
 		} else {
 			return false;
 		}
@@ -171,17 +153,13 @@ bool Owner::draw(int i) {
 
 bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
 	// Move Card from col1 to col2
-	// Card* c = col1.find(i);
 	cout << c->getName() << endl;
-	// col1.remove(i);
-	//cout << "AHAH" << endl;
 	if (col2.add(c)) {
 		col1.remove(pos);
-		//cout << "HAHA" << endl;
 		return true;
 	}
 	else {
-		cout << "Cannot make that move" << endl;
+		cerr << "Cannot make that move" << endl;
 		return false;
 	}
 	
@@ -198,7 +176,6 @@ void Owner::spend_magic(int i) {
 Hand &Owner::get_hand() { return hand; }
 Board &Owner::get_board() { return board; }
 Graveyard &Owner::get_graveyard() { return graveyard; }
-//Card *Owner::get_ritual() { return ritual; }
 
 vector<card_template_t> Owner::display_deck() {
 	return deck.display();

@@ -45,8 +45,6 @@ class Card : public Observer {
 		void notify(int p, int n) override;
 		virtual card_template_t display() = 0;
 		vector<string> &getTriggers();
-		//virtual bool activate();
-		//virtual void setActions(int a);
 };
 
 #endif

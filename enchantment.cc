@@ -3,7 +3,6 @@
 using namespace std;
 
 Enchantment::Enchantment(Card *e, string name, int cost, string ability_txt) : EnchantmentDec{e, name, cost, ability_txt} {
-    //cout << "DOESTHISWORK";
     silence = true;
 }
 Enchantment::Enchantment(Card *e, string name, int cost, int attack, int defense, string mod_type) : EnchantmentDec{e, name, cost, attack, defense, mod_type} {}
@@ -12,7 +11,6 @@ Enchantment::Enchantment(Card *e, string name, int cost, string ability_txt, int
     if (type == "AbilityCost") ability_cost = num;
     else actions = num;
 }
-//Enchantment::Enchantment(Minion *m, string name, int cost, string ability_txt, int ability_cost) : EnchantmentDec{m, name, cost, ability_txt, ability_cost} {}
 
 int Enchantment::change_actions(int a) {
     if (silence) return a;
@@ -51,13 +49,6 @@ int Enchantment::change_ability_cost(int a) {
 }
 
 void Enchantment::setEnchantment(Card *e) {
-    // if (!e) {
-    //     if (getEnchantment()) {
-    //         //cout << component->getName();
-    //         delete component;
-    //     }
-	// 	else dynamic_cast<Enchantment *>(component)->setEnchantment(e);
-    // }
     if (!component) component = e;
     else dynamic_cast<Enchantment *>(component)->setEnchantment(e);
 }
@@ -70,7 +61,6 @@ Enchantment *Enchantment::getEnchantment() {
 string Enchantment::getType() { return "Enchantment"; }
 
 card_template_t Enchantment::display() {
-    //cout << "DOESTHISWORK" << getStrength();
     if (getStrength() > 0 || getDefense() > 0) {
         if (mod_type == "Multiply") return display_enchantment_attack_defence(name, cost, ability_txt, "*"+to_string(attack), "*"+to_string(defense));
         else return display_enchantment_attack_defence(name, cost, ability_txt, "+"+to_string(attack), "+"+to_string(defense));

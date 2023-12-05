@@ -21,8 +21,6 @@ class Owner {
 	Hand hand;
 	Board board;
 	Graveyard graveyard;
-	//unique_ptr<Card> ritual_slot;
-	//Card *ritual;
 	vector<unique_ptr<Card>> allCards;
 
 	public:

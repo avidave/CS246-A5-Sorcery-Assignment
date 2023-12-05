@@ -6,22 +6,7 @@
 #include <algorithm>
 using namespace std;
 
-Collection::~Collection() {
-	// for (int i = 0; i < Cards.size(); ++i) {
-	// 	delete Cards[i];
-	// }
-
-	//Cards.clear();
-}
-
-// string Collection::display() {
-// 	string s;
-// 	for (int i = 0; i < Cards.size(); ++i) {
-// 		s += Cards[i]->display() + "\n\n";
-// 	}
-
-// 	return s;
-// }
+Collection::~Collection() {}
 
 bool Collection::remove(int i) {
 	if (i > Cards.size() || i < 0) return false;

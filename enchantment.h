@@ -9,7 +9,6 @@
 using namespace std;
 
 class Enchantment : public EnchantmentDec {
-	//unique_ptr<Ability> ability;
     bool silence = false;
 
     public:
@@ -17,15 +16,6 @@ class Enchantment : public EnchantmentDec {
         Enchantment(Card *e, string name, int cost, int attack, int defense, string mod_type);
         Enchantment(Card *e, string name, int cost, int attack, int defense, string ability_txt, string mod_type);
         Enchantment(Card *e, string name, int cost, string ability_txt, int num, string type);
-        //Enchantment(Minion *m, string name, int cost, string ability_txt, int ability_cost);
-
-        //Ability* get_ability();
-        // int get_actions() override;
-        // int getStrength() override;
-        // int getDefense() override;
-        // //int getCost() override;
-        // int getAbilityCost() override;
-        //void setActions(int a);
 
         int change_actions(int actions);
         int change_strength(int strength);

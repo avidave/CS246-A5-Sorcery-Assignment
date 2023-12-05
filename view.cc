@@ -38,7 +38,6 @@ string View::inspect(int p, int n) {
 
     Enchantment *e = dynamic_cast<Minion *>(m)->getEnchantment();
     vector<card_template_t> eCards;
-    //eCards.emplace_back(e->display());
 
     while (e) {
         eCards.emplace_back(e->display());
@@ -75,7 +74,6 @@ string View::inspect(int p, int n) {
 string View::board() {
     auto deck1 = p1->get_board();
     auto deck2 = p2->get_board();
-    //cout << deck1.numCards() << endl;
     card_template_t p1Card = display_player_card(1,p1->getName(),p1->get_life(),p1->get_magic());
     card_template_t p2Card = display_player_card(2,p2->getName(),p2->get_life(),p2->get_magic());
 
@@ -105,10 +103,8 @@ string View::board() {
     card_template_t p2Ritual;
     if (!ritual_1) p1Ritual = CARD_TEMPLATE_BORDER;
     else p1Ritual = ritual_1->display();
-    //else p1Ritual = CARD_TEMPLATE_BORDER;
     if (!ritual_2) p2Ritual = CARD_TEMPLATE_BORDER;
     else p2Ritual = ritual_2->display();
-    //else p2Ritual = CARD_TEMPLATE_BORDER;
 
     vector<card_template_t> minions1;
     vector<card_template_t> minions2;
@@ -133,7 +129,7 @@ string View::board() {
         }
     }
 
-    string s; // 167
+    string s;
 
     s += EXTERNAL_BORDER_CHAR_TOP_LEFT;
     for (int i = 0; i < 165; ++i) s += EXTERNAL_BORDER_CHAR_LEFT_RIGHT;

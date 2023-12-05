@@ -18,7 +18,6 @@ class GraphicalView : public View {
         void notify() override;
         void notify(int n) override;
         void notify(int p, int n) override;
-        //void print();
 };
 
 #endif

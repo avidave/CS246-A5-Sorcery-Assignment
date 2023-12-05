@@ -27,15 +27,8 @@ Controller::Controller(Owner p1, Owner p2, bool graphics) : p1{move(p1)}, p2{mov
 
 	attach(tv.get());
 }
-Controller::~Controller() {}
 
-void Controller::echoName(int n) {
-	if (p1.getNum() == n) {
-		cout << p1.getName() << endl;
-	} else {
-		cout << p2.getName() << endl;
-	}
-}
+Controller::~Controller() {}
 
 void Controller::trigger(int n) {
 	for (Trigger t : triggers) {
@@ -54,11 +47,6 @@ void Controller::start(bool testing) {
 		p1.reverse_deck();
 		p2.reverse_deck();
 	}
-
-	//p1.display_deck();
-	//cout << endl << endl << endl;
-	// p2.display_deck();
-	//for (Trigger t : triggers) t.notifyObservers();
 
 	p1.draw(5);
 	p2.draw(5);
@@ -192,7 +180,6 @@ void Controller::play(istream &in, bool testing) {
 			cout << "\t  hand -- Describe all cards in your hand." << endl;
 			cout << "\t  board -- Describe all cards on the board." << endl;
 		} else if (command == "end") {
-			// cout << command << endl;
 			triggers[3].notifyObservers();
 			end_turn_minion(triggers[3], active, active);
 			end_turn_minion(triggers[3], non_active, active);
@@ -200,11 +187,9 @@ void Controller::play(istream &in, bool testing) {
 			if (graphics) gv->notify(active->getNum());
 			turn();
 		} else if (command == "quit") {
-			//cout << command << endl;
 			return;
 		} else if (command == "draw") {
 			if (testing) {
-				// cout << command << endl;
 				active->draw(1);
 				if (graphics) gv->notify(active->getNum());
 			}
@@ -213,17 +198,11 @@ void Controller::play(istream &in, bool testing) {
 			if (testing) {
 				int pos = stoi(commands[1]);
 				Card *c = active->get_hand().find(pos);
-				// if (c->getType() == "Minion") {
-				// 	active->move(c, pos, active->get_hand(), active->get_graveyard());
-				// } else {
-				// 	active->get_hand().remove(pos);
-				// }
 				active->removeTrigger(triggers, c);
 				active->get_hand().remove(pos);
 				if (graphics) gv->notify(active->getNum());
 			}
 		} else if (command == "attack") {
-			// cout << command << endl;
 			int pos1, pos2;
 			pos1 = stoi(commands[1]);
 			Card *m1 = active->get_board().find(pos1);
@@ -270,7 +249,6 @@ void Controller::play(istream &in, bool testing) {
 				}
 			}
 		} else if (command == "play") {
-			// cout << command << endl;
 			int pos = stoi(commands[1]);
 			int pos2 = -1;
 			int target_int = -1;
@@ -288,8 +266,6 @@ void Controller::play(istream &in, bool testing) {
 				else target_int = -1;
 			}
 			Card *c = active->get_hand().find(pos);
-			// if (c->getType() == "Ritual" && c) active->setTrigger(triggers, c);
-			// if (c->getType() == "Minion") active->setTrigger(triggers, c);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
 				bool moved = active->move(c, pos, active->get_hand(), active->get_board());
 				if (moved) {
@@ -307,7 +283,6 @@ void Controller::play(istream &in, bool testing) {
 				}
 			}
 			if (c->getType() == "Ritual" && (c->getCost() <= active->get_magic() || testing)) {
-				cout << c->getName() << endl;
 				active->get_board().set_ritual(c);
 				active->get_hand().remove(pos);
 				active->spend_magic(c->getCost());
@@ -329,15 +304,12 @@ void Controller::play(istream &in, bool testing) {
 
 			if (c->getType() == "Spell" && (c->getCost() <= active->get_magic() || testing)) {
 				Spell *s = dynamic_cast<Spell*>(c);
-				cout << s->ability_type()[0] << endl;
 				if (s->ability_type()[0] == "Destroy" && target_int != -1 && pos2 != -1) {
 					Card *target_c;
 					if (pos2 != 5) target_c = target->get_board().find(pos2);
 					else target_c = target->get_board().get_ritual();
-					// s->activate(target, target_c, pos, 0);
 					if (target_c) {
 						if (s->ability_type()[1] == "Enchantment") {
-							//cout << "THIS RUNNING?" << endl;
 							dynamic_cast<Minion *>(target_c)->removeEnchantment();
 							active->spend_magic(c->getCost());
 							if (testing && active->get_magic() < 0) active->set_magic(0);
@@ -444,7 +416,6 @@ void Controller::play(istream &in, bool testing) {
 				gv->notify();
 			}
 		} else if (command == "use") {
-			// cout << command << endl;
 			int pos = stoi(commands[1]);
 			int pos2 = -1;
 			int target_int = -1;
@@ -517,22 +488,13 @@ void Controller::play(istream &in, bool testing) {
 				if (graphics) gv->notify();
 			}
 		} else if (command == "inspect") {
-			cout << command << endl;
 			int player = stoi(commands[1]);
 			int pos  = stoi(commands[1]);
-			//if ()
 			notifyObservers(player, pos);
 		} else if (command == "hand") {
-			// cout << command << endl;
-			cout << active->get_life() << endl;
-			cout << active->get_magic() << endl;
 			notifyObservers(active->getNum());
-			//active->display_hand();
 		} else if (command == "board") {
-			// cout << command << endl;
 			notifyObservers();
-			//active->display_board();
-			//notifyObservers();
 		}	
 		else {
 			continue;
@@ -548,13 +510,6 @@ void Controller::turn() {
 	active->reset_minion_actions();
 	start_turn_ritual(triggers[0], active, active);
 	start_turn_ritual(triggers[0], non_active, active);
-	//notifyObservers(active->getNum());
-	//active->display_hand();
-	// notifyObservers(active->getNum());
-	// cout << endl << endl << endl;
-	//active->display_deck();
-	// notifyObservers(active->getNum());
-	//cout << endl << endl << endl;
 }
 
 void Controller::flip_active() {

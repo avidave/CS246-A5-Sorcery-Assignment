@@ -17,7 +17,6 @@ class View : public Observer {
         virtual void notify() = 0;
         virtual void notify(int n) = 0;
         virtual void notify(int p, int n) = 0;
-        //virtual void print() = 0;
         string board();
         string hand(int p);
         string inspect(int p, int n);

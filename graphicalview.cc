@@ -11,8 +11,6 @@ GraphicalView::GraphicalView (Owner *p1, Owner *p2) : View{p1, p2}, window{new X
     string line;
     istringstream iss{s};
 
-    //window->fillRectangle(13, 10, 1020, 550, Xwindow::White);
-
     while(getline(iss, line, '\n')) {
         window->drawString(10, i * 10 + 10, line);
         ++i;
@@ -39,7 +37,6 @@ void GraphicalView::notify() {
         window->drawString(10, i * 10 + 10, line);
         ++i;
     }
-    //window->fillRectangle(10, 10, 50, 50, Xwindow::White);
 }
 
 void GraphicalView::notify(int n) {
@@ -56,8 +53,4 @@ void GraphicalView::notify(int n) {
     }
 }
 
-void GraphicalView::notify(int p, int n) {
-    //cout << inspect(p, n);
-}
-
-//void TextView::print() {}
+void GraphicalView::notify(int p, int n) {}

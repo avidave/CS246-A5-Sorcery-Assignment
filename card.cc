@@ -14,11 +14,6 @@ Card::Card(string name, int cost, string ability_txt, int ability_cost, int acti
 Card::Card(string name, int cost, string ability_txt, int ability_cost, int actions, vector<string> triggers) : name{name}, cost{cost}, attack{0}, defense{0}, ability_txt{ability_txt}, ability_cost{ability_cost}, actions{actions}, triggers{triggers} {}
 Card::Card(string name, int cost, int attack, int defense, string ability_txt, vector<string> triggers) : name{name}, cost{cost}, attack{attack}, defense{defense}, ability_txt{ability_txt}, ability_cost{0}, actions{1}, triggers{triggers} {};
 
-// string Card::display() {
-// 	return name + " " + to_string(cost) + " " + getType();
-
-// }
-
 string Card::getName() { return name; }
 int Card::getCost() { return cost; }
 int Card::getStrength() { return attack; }
@@ -47,20 +42,22 @@ void Card::use_action() {
 int Card::get_actions() { return actions; }
 string Card::getAbility() { return ability_txt; }
 int Card::getAbilityCost() { return ability_cost; }
-// string Card::getType() { return "Generic"; }
 void Card::attach(Trigger &t) {
 	t.attach(this);
 }
 void Card::notify() {
-	cout << getName() << " " << "Triggered" << endl;
+	// This function should only have code for view, not card.
+	// As a result, it is empty.
 }
 
 void Card::notify(int n) {
 	// This function should only have code for view, not card.
+	// As a result, it is empty.
 }
 
 void Card::notify(int p, int n) {
 	// This function should only have code for view, not card.
+	// As a result, it is empty.
 }
 
 vector<string> &Card::getTriggers() { return triggers; }

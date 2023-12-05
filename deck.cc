@@ -29,6 +29,5 @@ vector<card_template_t> Deck::display() { return {}; }
 
 bool Deck::add(Card *c) {
 	this->Cards.emplace_back(c);
-	//cout << c->display() << endl;
 	return true;
 }

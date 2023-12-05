@@ -16,4 +16,3 @@ void TextView::notify(int n) {
 void TextView::notify(int p, int n) {
     cout << inspect(p, n);
 }
-//void TextView::print() {}

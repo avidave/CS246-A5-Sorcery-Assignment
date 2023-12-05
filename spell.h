@@ -17,9 +17,6 @@ class Spell : public Card {
 	    string getType() override;
 	    card_template_t display() override;
 	    vector<string> ability_type();
-	    //bool activate(Owner *p, Card *c, int pos, int damage);
-        //bool activate();
-        //void setActions(int a);
 };
 
 #endif
