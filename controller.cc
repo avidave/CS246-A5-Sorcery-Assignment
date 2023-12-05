@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <memory>
 #include "subject.h"
 #include "controller.h"
 #include "owner.h"
@@ -225,22 +227,22 @@ void Controller::play(istream &in, bool testing) {
 					m1->take_damage(m2->getStrength());
 
 					if (m1->getDefense() <= 0) {
+						active->removeTrigger(triggers, m1);
 						triggers[2].notifyObservers();
 						minion_leave_minion(triggers[2], active);
 						minion_leave_minion(triggers[2], non_active);
 					}
 					if (m2->getDefense() <= 0) {
+						non_active->removeTrigger(triggers, m2);
 						triggers[2].notifyObservers();
 						minion_leave_minion(triggers[2], active);
 						minion_leave_minion(triggers[2], non_active);
 					}
 
 					if (m1->getDefense() <= 0) {
-						active->removeTrigger(triggers, m1);
 						active->move(m1, pos1, active->get_board(), active->get_graveyard());
 					}
 					if (m2->getDefense() <= 0) {
-						non_active->removeTrigger(triggers, m2);
 						non_active->move(m2, pos2, non_active->get_board(), non_active->get_graveyard());
 					}
 				
@@ -284,8 +286,8 @@ void Controller::play(istream &in, bool testing) {
 					triggers[1].notifyObservers();
 					active->setTrigger(triggers, c);
 					minion_enter_minion(triggers, c, active, active, non_active);
-					minion_enter_minion(triggers, c, non_active, active, non_active);
 					minion_enter_ritual(triggers, c, active, active, non_active);
+					minion_enter_minion(triggers, c, non_active, active, non_active);
 					minion_enter_ritual(triggers, c, non_active, active, non_active);
 					c->set_actions(0);
 				}
@@ -383,8 +385,8 @@ void Controller::play(istream &in, bool testing) {
 							triggers[1].notifyObservers();
 							active->setTrigger(triggers, rm);
 							minion_enter_minion(triggers, rm, active, active, non_active);
-							minion_enter_minion(triggers, rm, non_active, active, non_active);
 							minion_enter_ritual(triggers, rm, active, active, non_active);
+							minion_enter_minion(triggers, rm, non_active, active, non_active);
 							minion_enter_ritual(triggers, rm, non_active, active, non_active);
 						} else {
 							active->get_graveyard().remove(p);
@@ -406,7 +408,76 @@ void Controller::play(istream &in, bool testing) {
 				}
 			}
 		} else if (command == "use") {
-			cout << command << endl;
+			// cout << command << endl;
+			int pos = stoi(commands[1]);
+			int pos2 = -1;
+			int target_int = -1;
+			Owner *target;
+			if (commands.size() > 2) {
+				if (commands[3] == "r") pos2 = 5;
+				else pos2 = stoi(commands[3]);
+				try {
+					target_int = stoi(commands[2]);
+				} catch (...) {
+					target_int = -1;
+				}
+				if (target_int == 1) target = &p1;
+				else if (target_int == 2) target = &p2;
+				else target_int = -1;
+			}
+
+			Minion *m = dynamic_cast<Minion*>(active->get_board().find(pos));
+			if (m->ability_type()[0] == "Activated" && ((m->getAbilityCost() <= active->get_magic()) || testing)) {
+				if (m->ability_type()[1] == "Damage") {
+					Card *target_c = target->get_board().find(pos2);
+					target_c->take_damage(stoi(m->ability_type()[2]));
+					if (target_c->getDefense() <= 0) {
+						target->removeTrigger(triggers, target_c);
+						triggers[2].notifyObservers();
+						minion_leave_minion(triggers[2], active);
+						minion_leave_minion(triggers[2], non_active);
+						target->move(target_c, pos2, target->get_board(), target->get_graveyard());
+
+					}
+					active->spend_magic(m->getAbilityCost());
+					if (testing && active->get_magic() < 0) active->set_magic(0);
+
+				}
+
+				if (m->ability_type()[1] == "AddMinion") {
+					bool activated = false;
+					int num_summons = stoi(m->ability_type()[3]);
+					while (active->get_board().numCards() < 5 && num_summons > 0) {
+						ifstream summon {"./cards/Air Elemental.txt"};
+						string info;
+						vector<string> card_info;
+						card_info.emplace_back("Air Elemental");
+						while (getline(summon, info)) {
+							card_info.emplace_back(info);
+						}
+
+						if (card_info.size() == 1) card_info.emplace_back("1");
+						auto c = active->create_card(card_info);
+						active->add_to_all_cards(std::move(c));
+						Card *c_ptr = active->get_newly_added();
+						active->get_board().add(c_ptr);
+						triggers[1].notifyObservers();
+						active->setTrigger(triggers, c_ptr);
+						minion_enter_minion(triggers, c_ptr, active, active, non_active);
+						minion_enter_ritual(triggers, c_ptr, active, active, non_active);
+						minion_enter_minion(triggers, c_ptr, non_active, active, non_active);
+						minion_enter_ritual(triggers, c_ptr, non_active, active, non_active);
+						c_ptr->set_actions(0);
+						activated = true;
+						num_summons--;
+					}
+
+					if (activated) {
+						active->spend_magic(m->getAbilityCost());
+						if (testing && active->get_magic() < 0) active->set_magic(0);
+					}
+				}
+			}
 		} else if (command == "inspect") {
 			cout << command << endl;
 		} else if (command == "describe") {

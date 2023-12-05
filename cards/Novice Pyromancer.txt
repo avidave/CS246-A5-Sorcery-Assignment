@@ -4,3 +4,4 @@ Minion
 1
 Deal 1 damage to target minion.
 1
+Activated Damage 1

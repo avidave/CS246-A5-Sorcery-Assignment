@@ -42,6 +42,14 @@ void Owner::reverse_deck() {
 	deck.reverse();
 }
 
+void Owner::add_to_all_cards(unique_ptr<Card> c) {
+	allCards.emplace_back(std::move(c));
+}
+
+Card *Owner::get_newly_added() {
+	return allCards[allCards.size() - 1].get();
+}
+
 unique_ptr<Card> Owner::create_card(vector<string> info) {
 	if (info.size() >= 3 && info[2] == "Minion") {
 		// unique_ptr<Card> temp = make_unique<Minion>()
@@ -49,6 +57,10 @@ unique_ptr<Card> Owner::create_card(vector<string> info) {
 		if (info.size() == 5) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4])});
 		else if (info.size() == 6) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5]});
 		else if (info.size() == 7) return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], stoi(info[6])});
+		else if (info.size() == 8) {
+			vector<string> ability = split(info[7]);
+			return make_unique<Minion>(Minion{info[0], stoi(info[1]), stoi(info[3]), stoi(info[4]), info[5], stoi(info[6]), ability});
+		}
 		else if (info.size() == 9) {
 			if (info[6] == "Trigger") {
 				vector<string> triggers = split(info[7]);

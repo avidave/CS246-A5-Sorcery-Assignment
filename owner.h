@@ -32,6 +32,8 @@ class Owner {
 		Owner &operator=(const Owner &o) = delete;
 		Owner(Owner&& o) = default;
 		Owner &operator=(Owner &&o) = default;
+		void add_to_all_cards(unique_ptr<Card> c);
+		Card *get_newly_added();
 		void shuffle_deck();
 		void reverse_deck();
 		unique_ptr<Card> create_card(vector<string> info);

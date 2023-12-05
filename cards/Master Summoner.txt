@@ -4,3 +4,4 @@ Minion
 3
 Summon up to three 1/1 air elementals
 2
+Activated AddMinion 'Air_Elemental.txt' 3

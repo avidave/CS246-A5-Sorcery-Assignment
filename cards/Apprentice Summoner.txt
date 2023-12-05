@@ -4,3 +4,4 @@ Minion
 1
 Summon a 1/1 air elemental
 1
+Activated AddMinion 'Air_Elemental.txt' 1
