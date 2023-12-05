@@ -153,7 +153,6 @@ bool Owner::draw(int i) {
 
 bool Owner::move(Card *c, int pos, Collection &col1, Collection &col2) {
 	// Move Card from col1 to col2
-	cout << c->getName() << endl;
 	if (col2.add(c)) {
 		col1.remove(pos);
 		return true;

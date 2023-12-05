@@ -1,14 +1,15 @@
 Arteen
 Avi
-draw
-discard
-attack
-play
-use
-describe
+play 0
+play 1
+play 2
+end
+play 2
+play 3
+play 1
+hand
+end
 hand
 board
-help
-end
-quit
-help
+discard 0
+draw

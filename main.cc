@@ -55,9 +55,10 @@ int main(int argc, char *argv[]) {
 	control.turn();
 	if (isInit) {
 		control.play(gameFile, testing);
+		control.play(cin, testing);
 	} else {
 		control.play(cin, testing);
 	}
-	
+
 	cout << control.getActive()->getName() << " Wins" << endl;
 }

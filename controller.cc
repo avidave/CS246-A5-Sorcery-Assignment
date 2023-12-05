@@ -167,6 +167,13 @@ void Controller::play(istream &in, bool testing) {
 		if (commands.size() > 0) command = commands[0];
 		else continue;
 
+		// if (commands.size() > 1) {
+		// 	commands[1] = to_string(stoi(commands[1]) - 1);
+		// 	if (commands.size() > 2 && commands[3] != "r") {
+		// 		commands[3] = to_string(stoi(commands[3]) - 1);
+		// 	}
+		// }
+
 		if (command == "help") {
 			cout << "Commands: ";
 			cout << "help -- Display this message." << endl;

@@ -16,19 +16,19 @@ Minion::Minion(string name, int cost, int attack, int defense, string ability_tx
 
 int Minion::getStrength() {
 	if (!enchantment) return attack;
-	enchantment->change_strength(attack);
+	return enchantment->change_strength(attack);
 }
 int Minion::getDefense() {
 	if (!enchantment) return defense;
-	enchantment->change_defense(defense);
+	return enchantment->change_defense(defense);
 }
 int Minion::get_actions() {
 	if (!enchantment) return actions;
-	enchantment->change_actions(actions);
+	return enchantment->change_actions(actions);
 }
 int Minion::getAbilityCost() {
 	if (!enchantment) return ability_cost;
-	enchantment->change_ability_cost(ability_cost);
+	return enchantment->change_ability_cost(ability_cost);
 }
 string Minion::getType() { return "Minion"; }
 
