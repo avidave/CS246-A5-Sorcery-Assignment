@@ -276,7 +276,7 @@ void Controller::play(istream &in, bool testing) {
 			int pos2 = -1;
 			int target_int = -1;
 			Owner *target;
-			if (commands.size() > 2) {
+			if (commands.size() > 2 && commands.size() != 3) {
 				if (commands[3] == "r") pos2 = 5;
 				else pos2 = stoi(commands[3]);
 				try {
@@ -289,10 +289,11 @@ void Controller::play(istream &in, bool testing) {
 				else target_int = -1;
 			}
 			if (target_int != -1 && target_int != 1 && target_int != 2) {
-				continue
+				continue;
 			} else if (target_int != -1) {
 				if (pos2 < 0 || pos2 > target->get_board().numCards() - 1) continue;
 			}
+			if (commands.size() == 3) continue;
 			
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
