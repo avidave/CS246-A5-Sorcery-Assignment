@@ -517,10 +517,6 @@ void Controller::play(istream &in, bool testing) {
 
 				if (graphics) gv->notify();
 			}
-		} else if (command == "inspect") {
-			int player = stoi(commands[1]);
-			int pos  = stoi(commands[1]);
-			notifyObservers(player, pos);
 		} else if (command == "hand") {
 			notifyObservers(active->getNum());
 		} else if (command == "board") {
