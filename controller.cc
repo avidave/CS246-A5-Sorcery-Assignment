@@ -288,6 +288,11 @@ void Controller::play(istream &in, bool testing) {
 				else if (target_int == 2) target = &p2;
 				else target_int = -1;
 			}
+			if (target_int != -1 && target_int != 1 && target_int != 2) {
+				continue
+			} else if (target_int != -1) {
+				if (pos2 < 0 || pos2 > target->get_board().numCards() - 1) continue;
+			}
 			
 			Card *c = active->get_hand().find(pos);
 			if (c->getType() == "Minion" && (c->getCost() <= active->get_magic() || testing)) {
